@@ -1,0 +1,74 @@
+.code-compiler {
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #1e1e1e;
+}
+
+.editor-container {
+    border-bottom: 1px solid #333;
+}
+
+.controls {
+    padding: 10px;
+    background-color: #2d2d2d;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.run-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.run-button:hover {
+    background-color: #45a049;
+}
+
+.output-container {
+    padding: 15px;
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
+.preview-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 4px;
+    min-height: 100px;
+    color: #333;
+}
+
+.output-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.output,
+.error {
+    margin: 0;
+    padding: 10px;
+    background-color: #1e1e1e;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.error {
+    color: #ff6b6b;
+}
+
+.output {
+    color: #4CAF50;
+}
