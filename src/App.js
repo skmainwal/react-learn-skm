@@ -13,12 +13,13 @@ function App() {
   return (
     <div className="app-container">
       <div className="left-sidebar-container">
-        <LeftSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
+        <LeftSidebar activeTab={activeTab} setActiveTab={setActiveTab} />{" "}
+      </div>{" "}
       <div className="main-content">
-        {activeTab === "JavaScript" && <JavaScriptQuestion />}
-        {activeTab === "React" && <ReactQuestion />}
-      </div>
+        {" "}
+        {activeTab === "JavaScript" && <JavaScriptQuestion />}{" "}
+        {activeTab === "React" && <ReactQuestion />}{" "}
+      </div>{" "}
     </div>
   );
 }

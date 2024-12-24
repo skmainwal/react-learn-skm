@@ -3,18 +3,7 @@ import CollapsibleQA from "../CollapsibleQA";
 import questions from "./javaScriptQuestions";
 
 function JavaScriptQuestion() {
-  return (
-    <div>
-      {questions.map((question, index) => (
-        <CollapsibleQA
-          key={index}
-          question={question.question}
-          answer={question.answer}
-          code={question.code}
-        />
-      ))}
-    </div>
-  );
+  return <CollapsibleQA questions={questions} />;
 }
 
 export default JavaScriptQuestion;

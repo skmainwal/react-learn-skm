@@ -5,6 +5,7 @@ import questions from "./reactQuestions";
 function ReactQuestion() {
   return (
     <div>
+      {" "}
       {questions.map((question, index) => (
         <CollapsibleQA
           key={index}
@@ -12,7 +13,7 @@ function ReactQuestion() {
           answer={question.answer}
           code={question.code}
         />
-      ))}
+      ))}{" "}
     </div>
   );
 }
