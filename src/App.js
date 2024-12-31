@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import "./App.css";
+import "./styles/App.css";
+import LeftSidebar from "./layouts/LeftSidebar/LeftSidebar";
+import { faJs, faReact, faPython } from "@fortawesome/free-brands-svg-icons";
+import { faPenToSquare, faPlus } from "@fortawesome/free-solid-svg-icons";
 
-// Component imports
-import LeftSidebar from "./LeftSidebar";
-import JavaScriptQuestion from "./questions/JavaScriptQuestion";
-import ReactQuestion from "./questions/ReactQuestion";
+import ReactQuestions from "./pages/ReactQuestions/ReactQuestions";
+import JavaScriptQuestions from "./pages/JavaScriptQuestions/JavaScriptQuestions";
+import JavaScriptArticles from "./pages/JavaScriptArticles/JavaScriptArticles";
+import { ArticleEditor } from "./jsArticle";
 
 const TAB_COMPONENTS = {
-  JavaScript: JavaScriptQuestion,
-  React: ReactQuestion,
+  "JavaScript Q&A": JavaScriptQuestions,
+  "JavaScript Articles": JavaScriptArticles,
+  React: ReactQuestions,
 };
 
 const MainContent = ({ activeTab }) => {
@@ -16,17 +20,74 @@ const MainContent = ({ activeTab }) => {
   return TabComponent ? <TabComponent /> : null;
 };
 
+const menuItems = [
+  {
+    name: "JavaScript Q&A",
+    icon: faJs,
+  },
+  {
+    name: "JavaScript Articles",
+    icon: faPenToSquare,
+  },
+  {
+    name: "Write New Article",
+    icon: faPlus,
+  },
+  {
+    name: "React",
+    icon: faReact,
+  },
+  {
+    name: "Python",
+    icon: faPython,
+  },
+  {
+    name: "SQL",
+    icon: "",
+  },
+  {
+    name: "Cookie",
+    icon: "",
+  },
+  {
+    name: "Docker",
+    icon: "",
+  },
+];
+
 function App() {
-  const [activeTab, setActiveTab] = useState("JavaScript");
+  const [activeTab, setActiveTab] = useState("JavaScript Q&A");
+  const [showArticleEditor, setShowArticleEditor] = useState(false);
+
+  const handleTabChange = (tab) => {
+    if (tab === "Write New Article") {
+      setShowArticleEditor(true);
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
+  const handleEditorClose = () => {
+    setShowArticleEditor(false);
+    setActiveTab("JavaScript Articles");
+  };
 
   return (
-    <div className="app-container">
-      <div className="left-sidebar-container">
-        <LeftSidebar activeTab={activeTab} setActiveTab={setActiveTab} />{" "}
-      </div>{" "}
-      <div className="main-content">
+    <div className="app">
+      <LeftSidebar
+        activeTab={activeTab}
+        setActiveTab={handleTabChange}
+        menuItems={menuItems}
+      />{" "}
+      <main className="main-content">
         <MainContent activeTab={activeTab} />{" "}
-      </div>{" "}
+      </main>{" "}
+      {showArticleEditor && (
+        <ArticleEditor
+          onClose={handleEditorClose}
+          onComplete={handleEditorClose}
+        />
+      )}{" "}
     </div>
   );
 }

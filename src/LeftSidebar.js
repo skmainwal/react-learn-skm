@@ -20,23 +20,23 @@ function LeftSidebar({ activeTab, setActiveTab }) {
           className={activeTab === "JavaScript" ? "active" : ""}
           onClick={() => setActiveTab("JavaScript")}
         >
-          <FontAwesomeIcon icon={faJs} />
+          <FontAwesomeIcon icon={faJs} />{" "}
           <span className={`tab-text ${isCollapsed ? "hidden" : ""}`}>
             {" "}
-            JavaScript
-          </span>
-        </li>
+            JavaScript{" "}
+          </span>{" "}
+        </li>{" "}
         <li
           className={activeTab === "React" ? "active" : ""}
           onClick={() => setActiveTab("React")}
         >
-          <FontAwesomeIcon icon={faReact} />
+          <FontAwesomeIcon icon={faReact} />{" "}
           <span className={`tab-text ${isCollapsed ? "hidden" : ""}`}>
             {" "}
-            React
-          </span>
-        </li>
-      </ul>
+            React{" "}
+          </span>{" "}
+        </li>{" "}
+      </ul>{" "}
     </div>
   );
 }
