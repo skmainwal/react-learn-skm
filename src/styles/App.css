@@ -75,17 +75,96 @@ a:hover {
 
 .app-container {
     display: flex;
-    height: 98vh;
-    width: 99vw;
-    padding: 0;
-    margin: 0;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.navbar {
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 1000;
+}
+
+.main-content {
+    flex: 1;
+    /* padding: 2rem; */
+    background-color: #f5f5f5;
+    overflow-y: auto;
+}
+
+.top-nav {
+    display: none;
+    /* Since we're using the NavigationBar component */
 }
 
 
-/* .app-container .app-header {
-  height: 100px;
-  background-color: green;
-} */
+/* Navbar internal layout */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-left,
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.navbar a:hover {
+    background-color: #f0f0f0;
+}
+
+.navbar a.btn-signup {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1.5rem;
+}
+
+.navbar a.btn-signup:hover {
+    background-color: #0056b3;
+}
+
+.navbar a.has-dropdown {
+    position: relative;
+    padding-right: 1.5rem;
+}
+
+.navbar a.has-dropdown::after {
+    content: '▼';
+    font-size: 0.8em;
+    margin-left: 0.5rem;
+}
+
+
+/* Make sure content is responsive */
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem;
+    }
+    .navbar-left,
+    .navbar-right {
+        gap: 1rem;
+    }
+    .main-content {
+        padding: 1rem;
+    }
+}
 
 .left-sidebar-container {
     flex: 0 0 auto;
@@ -120,12 +199,6 @@ a:hover {
 
 .left-sidebar li.active {
     background-color: #f0f0f0;
-}
-
-.main-content {
-    flex: 1 1 auto;
-    transition: width 0.3s;
-    overflow-y: auto;
 }
 
 .tab-text {

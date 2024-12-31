@@ -1,0 +1,23 @@
+[
+  {
+    "title": "hello React SKM",
+    "content": "[highlight=#f8d7da]hello [/highlight]\n[code-snippet-0]\n",
+    "codeSnippets": [
+      "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Navigation Bar</title>\n  <style>\n    /* General Reset */\n    body {\n      margin: 0;\n      font-family: Arial, sans-serif;\n    }\n\n    /* Navigation Bar */\n    .navbar {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 10px 20px;\n      background-color: white;\n      border-bottom: 2px solid #007bff;\n    }\n\n    /* Left Section */\n    .navbar-left {\n      display: flex;\n      align-items: center;\n      gap: 20px;\n    }\n\n    .navbar-left img {\n      height: 24px;\n    }\n\n    .navbar-left a {\n      text-decoration: none;\n      color: black;\n      font-size: 14px;\n      font-weight: 500;\n      position: relative;\n    }\n\n    .navbar-left a:hover {\n      color: #007bff;\n    }\n\n    /* Dropdown indicator */\n    .navbar-left a:after {\n      content: \" ▼\";\n      font-size: 10px;\n      position: relative;\n      top: -2px;\n      left: 2px;\n    }\n\n    /* Right Section */\n    .navbar-right {\n      display: flex;\n      align-items: center;\n      gap: 15px;\n    }\n\n    .navbar-right a {\n      text-decoration: none;\n      color: black;\n      font-size: 14px;\n      font-weight: 500;\n    }\n\n    .navbar-right a:hover {\n      color: #007bff;\n    }\n\n    .navbar-right .btn-signup {\n      padding: 5px 10px;\n      background-color: black;\n      color: white;\n      border: none;\n      border-radius: 4px;\n      font-weight: bold;\n      text-transform: uppercase;\n      font-size: 12px;\n      cursor: pointer;\n      text-decoration: none;\n    }\n\n    .navbar-right .btn-signup:hover {\n      background-color: #333;\n    }\n  </style>\n</head>\n<body>\n  <!-- Navigation Bar -->\n  <div class=\"navbar\">\n    <!-- Left Section -->\n    <div class=\"navbar-left\">\n      <img src=\"https://via.placeholder.com/24\" alt=\"Codementor Logo\">\n      <a href=\"#\">Mentorship</a>\n      <a href=\"#\">Expert help</a>\n      <a href=\"#\">Freelancing</a>\n      <a href=\"#\">More</a>\n    </div>\n\n    <!-- Right Section -->\n    <div class=\"navbar-right\">\n      <a href=\"#\">Become a mentor</a>\n      <a href=\"#\">Log in</a>\n      <a href=\"#\" class=\"btn-signup\">Sign up</a>\n    </div>\n  </div>\n</body>\n</html>\n"
+    ],
+    "category": "JavaScript",
+    "topic": "Promise",
+    "createdAt": "2024-12-31T12:57:08.256Z",
+    "id": 1735637876448,
+    "lastEdited": "2024-12-31T12:57:08.264Z"
+  },
+  {
+    "title": "hyoo",
+    "content": "Hell",
+    "codeSnippets": [],
+    "category": "JavaScript",
+    "topic": "Functions",
+    "createdAt": "2024-12-31T11:54:47.829Z",
+    "id": 1735646087829
+  }
+]

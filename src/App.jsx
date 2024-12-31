@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import "./styles/App.css";
 import { faJs, faReact, faPython } from "@fortawesome/free-brands-svg-icons";
 import { faPenToSquare, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NavigationBar from "./components/nav/NavigationBar";
+
 import ReactQuestions from "./pages/ReactQuestions/ReactQuestions";
 import JavaScriptQuestions from "./pages/JavaScriptQuestions/JavaScriptQuestions";
 import JavaScriptArticles from "./pages/JavaScriptArticles/JavaScriptArticles";
@@ -20,59 +22,85 @@ const MainContent = ({ activeTab }) => {
 };
 
 const navRightMenuItems = [
-  { name: "Become a mentor", key: "Become a mentor" },
+  { name: "Become a mentor" },
   {
     name: "Log in",
-    key: "login",
     children: [
-      { name: "Student Login", key: "Student Login" },
-      { name: "Mentor Login", key: "Mentor Login" },
-      { name: "Admin Login", key: "Admin Login" },
+      { name: "Student Login" },
+      { name: "Mentor Login" },
+      { name: "Admin Login" },
     ],
   },
-  { name: "Sign up", isButton: true, key: "Sign up" },
+  { name: "Sign up", isButton: true },
+];
+
+const menuItems = [
+  {
+    name: "JavaScript Q&A",
+    icon: faJs,
+  },
+  {
+    name: "JavaScript Articles",
+    icon: faPenToSquare,
+  },
+
+  {
+    name: "React",
+    icon: faReact,
+  },
+  {
+    name: "Python",
+    icon: faPython,
+  },
+  {
+    name: "Write New Article",
+    icon: faPlus,
+  },
 ];
 
 function App() {
-  const [activeTab, setActiveTab] = useState("JavaScript Articles");
+  const [activeTab, setActiveTab] = useState("JavaScript Q&A");
   const [showEditor, setShowEditor] = useState(false);
-
   const navLeftMenuItems = [
     {
       name: "JavaScript Q&A",
       key: "JavaScript Q&A",
-      icon: faJs,
-      onClick: () => handleTabChange("JavaScript Q&A"),
+      onClick: () => {
+        setActiveTab("JavaScript Q&A");
+      },
     },
     {
       name: "JavaScript Articles",
       key: "JavaScript Articles",
-      icon: faPenToSquare,
-      onClick: () => handleTabChange("JavaScript Articles"),
+      onClick: () => {
+        setActiveTab("JavaScript Articles");
+      },
     },
 
     {
       name: "React",
       key: "React",
-      icon: faReact,
-      onClick: () => handleTabChange("React"),
+      onClick: () => {
+        setActiveTab("React");
+      },
     },
     {
       name: "Python",
       key: "Python",
-      icon: faPython,
-      onClick: () => handleTabChange("Python"),
+      onClick: () => {
+        setActiveTab("Python");
+      },
     },
     {
       name: "Write New Article",
-      key: "Write New Article",
-      icon: faPlus,
-      onClick: () => handleTabChange("Write New Article"),
+      key: "Write_new_Article",
+      onClick: () => {
+        setShowEditor(true);
+      },
     },
   ];
 
   const handleTabChange = (tab) => {
-    console.log("Selected tab:", tab);
     if (tab === "Write New Article") {
       setShowEditor(true);
     } else {
@@ -91,6 +119,22 @@ function App() {
         leftMenuItems={navLeftMenuItems}
         rightMenuItems={navRightMenuItems}
       />{" "}
+      <nav className="top-nav">
+        <ul>
+          {" "}
+          {menuItems.map((item) => (
+            <li
+              key={item.name}
+              className={activeTab === item.name ? "active" : ""}
+              onClick={() => handleTabChange(item.name)}
+            >
+              {" "}
+              {item.icon && <FontAwesomeIcon icon={item.icon} />}{" "}
+              <span className="tab-text"> {item.name} </span>{" "}
+            </li>
+          ))}{" "}
+        </ul>{" "}
+      </nav>{" "}
       <main className="main-content">
         {" "}
         {showEditor ? (

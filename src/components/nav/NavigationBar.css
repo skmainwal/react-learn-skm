@@ -1,0 +1,130 @@
+/* Navigation Bar */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    border-bottom: 2px solid #007bff;
+}
+
+
+/* Left Section */
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar-left img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.navbar-left a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+}
+
+.navbar-left a:hover {
+    color: #007bff;
+}
+
+
+/* Dropdown indicator - only for items with children */
+
+.navbar-left a.has-dropdown:after,
+.navbar-right a.has-dropdown:after {
+    content: " ▼";
+    font-size: 10px;
+    position: relative;
+    top: -2px;
+    left: 2px;
+}
+
+
+/* Right Section */
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-right a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.navbar-right a:hover {
+    color: #007bff;
+}
+
+.navbar-right .btn-signup {
+    padding: 5px 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.navbar-right .btn-signup:hover {
+    background-color: #333;
+}
+
+
+/* Dropdown menu positioning */
+
+.navbar-left a,
+.navbar-right a {
+    position: relative;
+}
+
+
+/* Hover effect for all links */
+
+.navbar-left a:hover,
+.navbar-right a:not(.btn-signup):hover {
+    color: #007bff;
+}
+
+
+/* Active state for navigation items */
+
+.navbar-left a.active,
+.navbar-right a.active:not(.btn-signup) {
+    background-color: #f0f7ff;
+    color: #007bff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.navbar-left a.active:hover,
+.navbar-right a.active:not(.btn-signup):hover {
+    background-color: #e6f0ff;
+}
+
+
+/* Adjust padding for non-active items to prevent layout shift */
+
+.navbar-left a,
+.navbar-right a:not(.btn-signup) {
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}

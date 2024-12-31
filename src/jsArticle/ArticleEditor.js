@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { articleService } from "../services/articleService";
 import "./ArticleEditor.css";
 
 const CATEGORIES = ["JavaScript", "React", "Python", "SQL", "Cookie", "Docker"];
@@ -61,7 +62,7 @@ const ArticleEditor = ({
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const handleSaveArticle = () => {
+  const handleSaveArticle = async () => {
     if (!title.trim()) {
       alert("Please enter a title for your article");
       return;
@@ -87,51 +88,39 @@ const ArticleEditor = ({
       createdAt: new Date().toISOString(),
     };
 
-    if (editMode && article) {
-      // Update existing article
-      const updatedArticle = {
-        ...article,
-        ...articleData,
-        lastEdited: new Date().toISOString(),
-      };
+    try {
+      if (editMode && article) {
+        // Update existing article
+        await articleService.updateArticle(article.id, {
+          ...articleData,
+          lastEdited: new Date().toISOString(),
+        });
+      } else {
+        // Create new article
+        await articleService.createArticle(articleData);
+      }
 
-      const existingArticles = JSON.parse(
-        localStorage.getItem("jsArticles") || "[]"
+      // Reset form
+      setTitle("");
+      setContent("");
+      setCodeSnippets([]);
+      setCategory(CATEGORIES[0]);
+      setSelectedTopic(null);
+      setShowTopicError(false);
+      alert(
+        editMode
+          ? "Article updated successfully!"
+          : "Article saved successfully!"
       );
-      const updatedArticles = existingArticles.map((a) =>
-        a.id === article.id ? updatedArticle : a
-      );
-      localStorage.setItem("jsArticles", JSON.stringify(updatedArticles));
-    } else {
-      // Create new article
-      const newArticle = {
-        id: Date.now(),
-        ...articleData,
-      };
 
-      const existingArticles = JSON.parse(
-        localStorage.getItem("jsArticles") || "[]"
-      );
-      const updatedArticles = [...existingArticles, newArticle];
-      localStorage.setItem("jsArticles", JSON.stringify(updatedArticles));
-    }
-
-    // Reset form
-    setTitle("");
-    setContent("");
-    setCodeSnippets([]);
-    setCategory(CATEGORIES[0]);
-    setSelectedTopic(null);
-    setShowTopicError(false);
-    alert(
-      editMode ? "Article updated successfully!" : "Article saved successfully!"
-    );
-
-    if (onComplete) {
-      onComplete();
-    }
-    if (onClose) {
-      onClose();
+      if (onComplete) {
+        onComplete();
+      }
+      if (onClose) {
+        onClose();
+      }
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -194,6 +183,7 @@ const ArticleEditor = ({
 
   const renderFormattedContent = (text) => {
     return text.split("\n").map((line, index) => {
+      // Handle code snippets
       if (line.startsWith("[code-snippet-")) {
         const snippetIndex = parseInt(line.match(/\d+/)[0]);
         if (snippetIndex < codeSnippets.length) {
@@ -215,6 +205,12 @@ const ArticleEditor = ({
                 style={vscDarkPlus}
                 showLineNumbers={true}
                 wrapLines={true}
+                customStyle={{
+                  backgroundColor: "#1E1E1E",
+                  color: "#D4D4D4",
+                  margin: "0",
+                  borderRadius: "0 0 4px 4px",
+                }}
               >
                 {codeSnippets[snippetIndex]}{" "}
               </SyntaxHighlighter>{" "}
@@ -224,6 +220,7 @@ const ArticleEditor = ({
         return null;
       }
 
+      // Handle headings
       if (line.startsWith("# ")) {
         return <h1 key={index}> {line.substring(2)} </h1>;
       }
@@ -234,10 +231,12 @@ const ArticleEditor = ({
         return <h3 key={index}> {line.substring(4)} </h3>;
       }
 
+      // Handle bullet points
       if (line.startsWith("• ")) {
         return <li key={index}> {line.substring(2)} </li>;
       }
 
+      // Handle highlights and bold text
       const highlightRegex =
         /\[highlight=(#[a-fA-F0-9]{6})\](.*?)\[\/highlight\]/g;
       let parts = [];
@@ -261,14 +260,16 @@ const ArticleEditor = ({
         parts.push(line.substring(lastIndex));
       }
 
-      if (parts.length === 0) {
-        const boldRegex = /\*\*(.*?)\*\*/g;
-        parts = line
-          .split(boldRegex)
-          .map((part, i) =>
-            i % 2 === 0 ? part : <strong key={i}> {part} </strong>
-          );
-      }
+      const boldRegex = /\*\*(.*?)\*\*/g;
+      parts = parts.map((part, i) =>
+        typeof part === "string"
+          ? part
+              .split(boldRegex)
+              .map((boldPart, j) =>
+                j % 2 === 0 ? boldPart : <strong key={j}> {boldPart} </strong>
+              )
+          : part
+      );
 
       return <p key={index}> {parts} </p>;
     });
@@ -280,8 +281,24 @@ const ArticleEditor = ({
         <button className="editor-close-btn" onClick={handleCancel}>
           <FontAwesomeIcon icon={faTimes} />{" "}
         </button>{" "}
-        <h2> {editMode ? "Edit Article" : "Write New Article"} </h2>{" "}
-        <div className="editor-section">
+        <div className="editor-header-container">
+          <div className="editor-header-top">
+            <h2> {editMode ? "Edit Article" : "Write New Article"} </h2>{" "}
+            <div className="editor-header-actions">
+              <button
+                onClick={handleSaveArticle}
+                className="header-btn header-save-btn"
+              >
+                {editMode ? "Save Changes" : "Save Article"}{" "}
+              </button>{" "}
+              <button
+                onClick={handleCancel}
+                className="header-btn header-cancel-btn"
+              >
+                Cancel{" "}
+              </button>{" "}
+            </div>{" "}
+          </div>{" "}
           <div className="editor-header">
             <input
               type="text"
@@ -318,8 +335,6 @@ const ArticleEditor = ({
               isSearchable
             />
           </div>{" "}
-        </div>{" "}
-        <div className="editor-section">
           <div className="formatting-toolbar">
             <button onClick={() => handleFormat("bold")} className="format-btn">
               Bold{" "}
@@ -362,6 +377,8 @@ const ArticleEditor = ({
               )}{" "}
             </div>{" "}
           </div>{" "}
+        </div>{" "}
+        <div className="editor-content">
           <div className="content-container">
             <textarea
               placeholder="Write your article content here..."
@@ -373,27 +390,18 @@ const ArticleEditor = ({
               <h3> Preview </h3> {renderFormattedContent(content)}{" "}
             </div>{" "}
           </div>{" "}
-        </div>{" "}
-        <div className="editor-section">
-          <h3> Add Code Snippets </h3>{" "}
-          <textarea
-            placeholder="Write your code snippet here..."
-            value={currentSnippet}
-            onChange={(e) => setCurrentSnippet(e.target.value)}
-            className="code-input"
-          />
-          <button onClick={addCodeSnippet} className="add-snippet-btn">
-            Add Code Snippet{" "}
-          </button>{" "}
-        </div>{" "}
-        <div className="editor-actions">
-          <button onClick={handleSaveArticle} className="save-btn">
-            {" "}
-            {editMode ? "Save Changes" : "Save Article"}{" "}
-          </button>{" "}
-          <button onClick={handleCancel} className="cancel-btn">
-            Cancel{" "}
-          </button>{" "}
+          <div className="editor-section">
+            <h3> Add Code Snippets </h3>{" "}
+            <textarea
+              placeholder="Write your code snippet here..."
+              value={currentSnippet}
+              onChange={(e) => setCurrentSnippet(e.target.value)}
+              className="code-input"
+            />
+            <button onClick={addCodeSnippet} className="add-snippet-btn">
+              Add Code Snippet{" "}
+            </button>{" "}
+          </div>{" "}
         </div>{" "}
       </div>{" "}
     </div>
