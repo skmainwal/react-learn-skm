@@ -102,5 +102,18 @@
     "createdAt": "2024-12-31T16:41:34.651Z",
     "id": 1735661805675,
     "lastEdited": "2024-12-31T16:41:34.663Z"
+  },
+  {
+    "title": " What is Lexical Scope ?",
+    "content": "**Lexical scope simply means that a function can access the variables that were available where the function was written, not where it's called.**\n\n**In other words:**\n\n• If you define a function inside another function, the inner function remembers the variables from the outer function, even if it is called later.\n**Think of it like this:**\n• The location where the function is written (in the code) determines what variables the function can access.\n### Simple Example:\n\n[code-snippet-0]\n\n**Here:**\n\n• The inner function is inside the outer function, so it can access message because of lexical scope.\n• Even though inner is called inside outer, it remembers message because of where it was written.\n**Key Points of Lexical Scope:**\n**• Functions can access variables that are in their surrounding (outer) environment, which is called lexical scoping.**\n• It is based on where the function is defined, not where it is called.\n\n\n### Another Example (Closure):\n\n\n[code-snippet-1]\n\n**Here:**\n\n• The function increment has access to count even though createCounter has already finished executing.\n• Each call to createCounter remembers its own count variable, creating separate counters because of lexical scope.\n",
+    "codeSnippets": [
+      "function outer() {\n  let message = \"Hello from outer\";  // Outer function's variable\n\n  function inner() {\n    console.log(message);  // Inner function can access 'message' from outer\n  }\n\n  inner();\n}\n\nouter();  // Output: \"Hello from outer\"\n",
+      "function createCounter() {\n  let count = 0;\n\n  return function increment() {\n    count++;  // This function can access 'count' because of lexical scope\n    console.log(count);\n  };\n}\n\nconst counter1 = createCounter();\nconst counter2 = createCounter();\n\ncounter1();  // Output: 1\ncounter1();  // Output: 2\ncounter2();  // Output: 1 (counter2 has its own 'count' variable)\n"
+    ],
+    "category": "JavaScript",
+    "topic": "Scope",
+    "createdAt": "2024-12-31T17:03:13.980Z",
+    "id": 1735664529821,
+    "lastEdited": "2024-12-31T17:03:13.986Z"
   }
 ]
