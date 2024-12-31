@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { articleService } from "../services/articleService";
 import "./ArticleEditor.css";
@@ -181,6 +181,20 @@ const ArticleEditor = ({
     setShowColorPicker(false);
   };
 
+  const handleDeleteSnippet = (snippetIndex) => {
+    const newCodeSnippets = codeSnippets.filter(
+      (_, index) => index !== snippetIndex
+    );
+    setCodeSnippets(newCodeSnippets);
+
+    // Update content to remove the code snippet reference
+    const newContent = content
+      .split("\n")
+      .filter((line) => !line.includes(`[code-snippet-${snippetIndex}]`))
+      .join("\n");
+    setContent(newContent);
+  };
+
   const renderFormattedContent = (text) => {
     return text.split("\n").map((line, index) => {
       // Handle code snippets
@@ -191,14 +205,23 @@ const ArticleEditor = ({
             <div key={index} className="code-preview">
               <div className="code-header">
                 <span> JavaScript </span>{" "}
-                <button
-                  className="copy-btn"
-                  onClick={() =>
-                    handleCopyCode(codeSnippets[snippetIndex], snippetIndex)
-                  }
-                >
-                  {copiedIndex === snippetIndex ? "Copied!" : "Copy"}{" "}
-                </button>{" "}
+                <div className="code-header-actions">
+                  <button
+                    className="copy-btn"
+                    onClick={() =>
+                      handleCopyCode(codeSnippets[snippetIndex], snippetIndex)
+                    }
+                  >
+                    {copiedIndex === snippetIndex ? "Copied!" : "Copy"}{" "}
+                  </button>{" "}
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteSnippet(snippetIndex)}
+                    title="Delete snippet"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />{" "}
+                  </button>{" "}
+                </div>{" "}
               </div>{" "}
               <SyntaxHighlighter
                 language="javascript"
@@ -289,6 +312,7 @@ const ArticleEditor = ({
                 onClick={handleSaveArticle}
                 className="header-btn header-save-btn"
               >
+                {" "}
                 {editMode ? "Save Changes" : "Save Article"}{" "}
               </button>{" "}
               <button
@@ -312,6 +336,7 @@ const ArticleEditor = ({
               onChange={(e) => setCategory(e.target.value)}
               className="category-select"
             >
+              {" "}
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
                   {" "}

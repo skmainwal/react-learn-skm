@@ -2,6 +2,9 @@
     "name": "react-learn-skm",
     "version": "0.1.0",
     "private": true,
+    "engines": {
+        "node": "18.x"
+    },
     "dependencies": {
         "@babel/standalone": "^7.26.4",
         "@fortawesome/free-brands-svg-icons": "^6.7.2",
@@ -13,6 +16,7 @@
         "express": "^4.21.2",
         "prismjs": "^1.29.0",
         "react": "^18.2.0",
+        "react-beautiful-dnd": "^13.1.1",
         "react-dom": "^18.2.0",
         "react-icons": "^5.4.0",
         "react-scripts": "5.0.1",
@@ -20,9 +24,11 @@
         "react-syntax-highlighter": "^15.6.1"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "node src/server/index.js",
+        "heroku-postbuild": "npm install && npm run build",
+        "client": "react-scripts start",
         "server": "node src/server/index.js",
-        "dev": "concurrently \"npm run server\" \"npm start\"",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

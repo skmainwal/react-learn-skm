@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const {
     getAllArticles,
     saveArticle,
@@ -10,9 +11,21 @@ const {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+    origin: process.env.NODE_ENV === "production" ?
+        process.env.CLIENT_URL :
+        "http://localhost:3000",
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
+// Serve static files in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../../build")));
+}
+
+// API Routes
 // Get all articles
 app.get("/api/articles", async(req, res) => {
     try {
@@ -61,6 +74,13 @@ app.delete("/api/articles/:id", async(req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+// Serve React app for any other routes in production
+if (process.env.NODE_ENV === "production") {
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../../build", "index.html"));
+    });
+}
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
