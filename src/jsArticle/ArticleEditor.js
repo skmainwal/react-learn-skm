@@ -18,6 +18,22 @@ const TOPICS = [
   "Hoisting",
   "Array",
   "String",
+  "Object",
+  "DOM",
+  "Event",
+  "Async",
+  "Fetch",
+  "Cookie",
+  "Session",
+  "LocalStorage",
+  "SessionStorage",
+  "let, const, var",
+  "Arrow Function",
+  "Template Literal",
+  "Spread Operator",
+  "Rest Operator",
+  "Destructuring",
+  "TDZ (Temporal Dead Zone)",
 ].map((topic) => ({ value: topic, label: topic }));
 
 const ArticleEditor = ({
@@ -212,6 +228,7 @@ const ArticleEditor = ({
                       handleCopyCode(codeSnippets[snippetIndex], snippetIndex)
                     }
                   >
+                    {" "}
                     {copiedIndex === snippetIndex ? "Copied!" : "Copy"}{" "}
                   </button>{" "}
                   <button
@@ -235,6 +252,7 @@ const ArticleEditor = ({
                   borderRadius: "0 0 4px 4px",
                 }}
               >
+                {" "}
                 {codeSnippets[snippetIndex]}{" "}
               </SyntaxHighlighter>{" "}
             </div>
