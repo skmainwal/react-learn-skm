@@ -1,4 +1,6 @@
 export const CATEGORIES = [
+  // "html",
+  // "css",
   "JavaScript Basics",
   "React",
   "Python",
@@ -12,17 +14,17 @@ export const CATEGORIES = [
   "Error Handling",
   "Data Structures",
   "Algorithms",
-  "Design Patterns",
-  "Performance Optimization",
-  "Testing",
-  "Debugging",
-  "Browser APIs",
-  "Node.js",
-  "Security",
-  "Best Practices",
-  "Frameworks",
-  "Build Tools",
-  "Package Management",
+  // "Design Patterns",
+  // "Performance Optimization",
+  // "Testing",
+  // "Debugging",
+  // "Browser APIs",
+  // "Node.js",
+  // "Security",
+  // "Best Practices",
+  // "Frameworks",
+  // "Build Tools",
+  // "Package Management",
 ];
 
 export const TECH_STACK_CATEGORIES = {
@@ -30,6 +32,8 @@ export const TECH_STACK_CATEGORIES = {
   REACT: "React",
   PYTHON: "Python",
   DOCKER: "Docker",
+  HTML: "html",
+  CSS: "css",
   DJANGO: "Django",
   ES6_FEATURES: "ES6+ Features",
   DOM_MANIPULATION: "DOM Manipulation",
@@ -81,6 +85,23 @@ export const CATEGORY_QUERY_PARAMS = {
 };
 
 export const TOPICS = {
+  html: [
+    "HTML Basics",
+    "HTML5 Elements",
+    "Forms & Input Types",
+    "Semantic HTML",
+    "Tables & Lists",
+    "Media Elements",
+    "Meta Tags & SEO",
+    "HTML Attributes",
+    "Document Structure",
+    "HTML Best Practices",
+    "Accessibility",
+    "HTML5 APIs",
+    "SVG & Canvas",
+    "Web Components",
+    "HTML Validation",
+  ],
   "JavaScript Basics": [
     "Variables & Data Types",
     "Operators",

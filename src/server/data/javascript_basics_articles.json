@@ -115,5 +115,30 @@
     "createdAt": "2024-12-31T17:03:13.980Z",
     "id": 1735664529821,
     "lastEdited": "2024-12-31T17:03:13.986Z"
+  },
+  {
+    "title": " Shallow Copy vs. Deep Copy",
+    "content": "### Shallow Copy\n\n• A shallow copy creates a new object,but it does not copy the nested objects inside it.\n• Instead, it only copies references to the nested objects.\n• Changes made to nested objects in the copied object will affect the original object.\n### Deep Copy\n\n• A deep copy creates a new object and recursively copies all nested objects inside it.\n• Changes made to nested objects in the copied object do not affect the original object.\n[code-snippet-0]\n",
+    "codeSnippets": [
+      "// Original object\nconst original = {\n  name: \"Alice\",\n  details: {\n    age: 25,\n    city: \"Wonderland\"\n  }\n};\n\n// Shallow Copy\nconst shallowCopy = { ...original };\n\n// Deep Copy (using JSON)\nconst deepCopy = JSON.parse(JSON.stringify(original));\n\n// Modify the nested object in the shallow copy\nshallowCopy.details.age = 30;\n\nconsole.log(\"Original:\", original.details.age); // Output: 30 (affected)\nconsole.log(\"Shallow Copy:\", shallowCopy.details.age); // Output: 30\n\n// Modify the nested object in the deep copy\ndeepCopy.details.city = \"Dreamland\";\n\nconsole.log(\"Original:\", original.details.city); // Output: Wonderland (not affected)\nconsole.log(\"Deep Copy:\", deepCopy.details.city); // Output: Dreamland\n"
+    ],
+    "category": "JavaScript Basics",
+    "topic": "Objects",
+    "createdAt": "2025-01-01T17:12:25.616Z",
+    "id": 1735751545614000
+  },
+  {
+    "title": "How to freeze the any value inside the object So that we can not change that value ",
+    "content": "** Freezing in JavaScript means locking an object so it cannot be changed. Once an object is frozen**\n1. You cannot add new keys to the object.\n2. You cannot remove existing keys from the object.\n3. You cannot change the values of existing keys in the object.\n\nHowever, freezing applies only to the object itself. If the object contains other objects (nested objects), those nested objects are still changeable unless you freeze them too.\n\n### Imagine it Like This:\nThink of an object as a box. When you freeze it:\n\n** • You can look at what's inside the box (read its values).**\n** • But you can't add, remove, or change the items in the box.**\n**• If the box has another smaller box inside it (nested object), you can still open and change that smaller box unless you freeze it too.**\n\n### Simple Example:\n\n\n[code-snippet-0]\n\n### Freezing Nested Objects\nIf the object has another object inside it, freezing the outer object doesn’t protect the inner one.\n\n[code-snippet-1]\n\n### Freezing a Single Key\n**Steps to Freeze a Single Key:**\n• Use Object.defineProperty() to define a property.\n• Set the writable attribute to false to prevent changes to the value.\n• Set the configurable attribute to false to prevent deletion or redefinition of the property.\n\n\n[code-snippet-2]\n\n[code-snippet-3]\n",
+    "codeSnippets": [
+      "const obj = { name: \"Alice\", age: 25 };\n\n// Freeze the object\nObject.freeze(obj);\n\n// Try to change or add values\nobj.age = 30;  // This won't work\nobj.city = \"Wonderland\";  // This won't work either\n\nconsole.log(obj); \n// Output: { name: \"Alice\", age: 25 }\n",
+      "const obj = {\n  name: \"Alice\",\n  details: { age: 25, city: \"Wonderland\" },\n};\n\n// Freeze the outer object\nObject.freeze(obj);\n\n// Try to modify the inner object\nobj.details.city = \"Dreamland\"; // This still works!\n\nconsole.log(obj.details.city); \n// Output: Dreamland\n",
+      "const obj = {\n  name: \"Alice\",\n  age: 25,\n};\n\n// Freeze the \"age\" key\nObject.defineProperty(obj, \"age\", {\n  writable: false,    // Prevents value modification\n  configurable: false // Prevents deletion or redefinition\n});\n\n// Attempt to modify the \"age\" key\nobj.age = 30; // This will not change the value\n\n// Attempt to delete the \"age\" key\ndelete obj.age; // This will fail silently or throw an error in strict mode\n\nconsole.log(obj); \n// Output: { name: \"Alice\", age: 25 }\n",
+      "const obj = {\n  name: \"Alice\",\n  details: {\n    age: 25,\n    city: \"Wonderland\",\n  },\n};\n\n// Freeze only the \"details\" key\nObject.defineProperty(obj, \"details\", {\n  writable: false,    // Prevents reassignment of the \"details\" key\n  configurable: false // Prevents deletion or redefinition\n});\n\n// Attempt to reassign \"details\"\nobj.details = {}; // This will not work\n\n// To freeze the nested \"details\" object\nObject.freeze(obj.details);\n\n// Attempt to modify the nested \"details\" object\nobj.details.city = \"Dreamland\"; // This will not work\nconsole.log(obj.details.city); \n// Output: Wonderland\n"
+    ],
+    "category": "JavaScript Basics",
+    "topic": "Objects",
+    "createdAt": "2025-01-01T17:34:00.752Z",
+    "id": 1735752840748000
   }
 ]
