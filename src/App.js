@@ -12,12 +12,14 @@ import PythonQuestions from "./pages/python/PythonQuestions";
 import { TECH_STACK_CATEGORIES } from "./jsArticle/utils/contant";
 import { ArticleEditor } from "./jsArticle";
 import { articleService } from "./services/articleService";
+import DjangoQuestions from "./pages/django/DjangoQuestions";
 
 const TAB_COMPONENTS = {
   "JavaScript Q&A": JavaScriptQuestions,
   "JavaScript Basics": JavaScriptArticles,
   React: ReactQuestions,
   Python: PythonQuestions,
+  Django: DjangoQuestions,
 };
 
 const MainContent = ({ activeTab, reloadKey }) => {
@@ -35,22 +37,28 @@ function App() {
 
   const navLeftMenuItems = [
     {
-      name: "JavaScript Basics",
-      key: "JavaScript Basics",
+      name: TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS,
+      key: TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS,
       icon: faPenToSquare,
-      onClick: () => handleTabChange("JavaScript Basics"),
+      onClick: () => handleTabChange(TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS),
     },
     {
-      name: "React",
-      key: "React",
+      name: TECH_STACK_CATEGORIES.REACT,
+      key: TECH_STACK_CATEGORIES.REACT,
       icon: faReact,
-      onClick: () => handleTabChange("React"),
+      onClick: () => handleTabChange(TECH_STACK_CATEGORIES.REACT),
     },
     {
-      name: "Python",
-      key: "Python",
+      name: TECH_STACK_CATEGORIES.PYTHON,
+      key: TECH_STACK_CATEGORIES.PYTHON,
       icon: faPython,
-      onClick: () => handleTabChange("Python"),
+      onClick: () => handleTabChange(TECH_STACK_CATEGORIES.PYTHON),
+    },
+    {
+      name: TECH_STACK_CATEGORIES.DJANGO,
+      key: TECH_STACK_CATEGORIES.DJANGO,
+      icon: faPython,
+      onClick: () => handleTabChange(TECH_STACK_CATEGORIES.DJANGO),
     },
   ];
 
