@@ -107,16 +107,19 @@
 
 .navbar-left a.active,
 .navbar-right a.active:not(.btn-signup) {
-    background-color: #f0f7ff;
+    /* background-color: #007bff; */
     color: #007bff;
     padding: 8px 12px;
     border-radius: 6px;
     position: relative;
+    /* box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2); */
+    transition: all 0.2s ease;
 }
 
 .navbar-left a.active:hover,
 .navbar-right a.active:not(.btn-signup):hover {
-    background-color: #e6f0ff;
+    /* background-color: #0056b3; */
+    color: #007bff;
 }
 
 

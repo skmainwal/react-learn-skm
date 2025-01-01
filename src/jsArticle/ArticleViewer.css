@@ -10,10 +10,6 @@
     gap: 20px;
 }
 
-.articles-list {
-    border-right: 1px solid #ddd;
-}
-
 .article-item {
     padding: 15px;
     border: 1px solid #eee;

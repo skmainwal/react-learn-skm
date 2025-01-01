@@ -1,76 +1,81 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Select from "react-select";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { articleService } from "../services/articleService";
+import { CATEGORIES, TOPICS } from "./utils/contant";
 import "./ArticleEditor.css";
-
-const CATEGORIES = ["JavaScript", "React", "Python", "SQL", "Cookie", "Docker"];
-const TOPICS = [
-  "Variables",
-  "Functions",
-  "Scope",
-  "CSS",
-  "HTML",
-  "Promise",
-  "Hoisting",
-  "Array",
-  "String",
-  "Object",
-  "DOM",
-  "Event",
-  "Async",
-  "Fetch",
-  "Cookie",
-  "Session",
-  "LocalStorage",
-  "SessionStorage",
-  "let, const, var",
-  "Arrow Function",
-  "Template Literal",
-  "Spread Operator",
-  "Rest Operator",
-  "Destructuring",
-  "TDZ (Temporal Dead Zone)",
-].map((topic) => ({ value: topic, label: topic }));
 
 const ArticleEditor = ({
   editMode = false,
   article = null,
   onComplete = null,
   onClose = null,
-}) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [codeSnippets, setCodeSnippets] = useState([]);
-  const [currentSnippet, setCurrentSnippet] = useState("");
-  const [showColorPicker, setShowColorPicker] = useState(false);
-  const [copiedIndex, setCopiedIndex] = useState(null);
-  const [category, setCategory] = useState(CATEGORIES[0]);
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const [showTopicError, setShowTopicError] = useState(false);
-
-  useEffect(() => {
-    if (editMode && article) {
-      setTitle(article.title);
-      setContent(article.content);
-      setCodeSnippets([...article.codeSnippets]);
-      setCategory(article.category || CATEGORIES[0]);
-      setSelectedTopic(
-        article.topic ? { value: article.topic, label: article.topic } : null
-      );
-    }
-  }, [editMode, article]);
-
-  const colors = [
+  onSave = null,
+  categories = CATEGORIES,
+  topics = [],
+  features = {
+    codeSnippets: true,
+    formatting: true,
+    preview: true,
+    categories: true,
+    topics: true,
+  },
+  syntaxHighlighterTheme = vscDarkPlus,
+  syntaxHighlighterLanguage = "javascript",
+  className = "",
+  overlayClassName = "",
+  title = "",
+  titlePlaceholder = "Article Title",
+  contentPlaceholder = "Write your article content here...",
+  codeSnippetPlaceholder = "Write your code snippet here...",
+  saveButtonText = "Save",
+  cancelButtonText = "Cancel",
+  addSnippetButtonText = "Add Code Snippet",
+  previewTitle = "Preview",
+  colors = [
     { name: "Yellow", value: "#fff3cd" },
     { name: "Green", value: "#d4edda" },
     { name: "Blue", value: "#cce5ff" },
     { name: "Red", value: "#f8d7da" },
     { name: "Gray", value: "#e2e3e5" },
-  ];
+  ],
+  serviceType,
+}) => {
+  const [articleTitle, setArticleTitle] = useState(title);
+  const [content, setContent] = useState("");
+  const [codeSnippets, setCodeSnippets] = useState([]);
+  const [currentSnippet, setCurrentSnippet] = useState("");
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [category, setCategory] = useState(categories[0] || "");
+  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [showTopicError, setShowTopicError] = useState(false);
+  const [filteredTopics, setFilteredTopics] = useState(
+    TOPICS[serviceType] || []
+  );
+
+  useEffect(() => {
+    if (editMode && article) {
+      setArticleTitle(article.title);
+      setContent(article.content);
+      setCodeSnippets([...article.codeSnippets]);
+      setCategory(article.category || categories[0] || "");
+      setSelectedTopic(
+        article.topic ? { value: article.topic, label: article.topic } : null
+      );
+    }
+  }, [editMode, article, categories]);
+
+  useEffect(() => {
+    const topicsForCategory = TOPICS[serviceType] || [];
+    setFilteredTopics(topicsForCategory);
+    if (selectedTopic && !topicsForCategory.includes(selectedTopic.value)) {
+      setSelectedTopic(null);
+    }
+  }, [serviceType, selectedTopic]);
 
   const handleCopyCode = (code, index) => {
     navigator.clipboard.writeText(code);
@@ -78,8 +83,12 @@ const ArticleEditor = ({
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const handleSaveArticle = async () => {
-    if (!title.trim()) {
+  const handleSaveArticle = async (e) => {
+    if (e) {
+      e.stopPropagation();
+    }
+
+    if (!articleTitle.trim()) {
       alert("Please enter a title for your article");
       return;
     }
@@ -89,45 +98,35 @@ const ArticleEditor = ({
       return;
     }
 
-    if (!selectedTopic) {
+    if (features.topics && !selectedTopic) {
       setShowTopicError(true);
       alert("Please select a topic for your article");
       return;
     }
 
     const articleData = {
-      title,
+      title: articleTitle,
       content,
-      codeSnippets,
-      category,
-      topic: selectedTopic.value,
+      codeSnippets: features.codeSnippets ? codeSnippets : [],
+      ...(features.categories && { category }),
+      ...(features.topics && {
+        topic: selectedTopic ? selectedTopic.value : null,
+      }),
       createdAt: new Date().toISOString(),
     };
 
     try {
-      if (editMode && article) {
-        // Update existing article
-        await articleService.updateArticle(article.id, {
-          ...articleData,
-          lastEdited: new Date().toISOString(),
-        });
-      } else {
-        // Create new article
-        await articleService.createArticle(articleData);
+      if (onSave) {
+        await onSave(articleData, editMode);
       }
 
       // Reset form
-      setTitle("");
+      setArticleTitle("");
       setContent("");
       setCodeSnippets([]);
-      setCategory(CATEGORIES[0]);
+      setCategory(categories[0] || "");
       setSelectedTopic(null);
       setShowTopicError(false);
-      alert(
-        editMode
-          ? "Article updated successfully!"
-          : "Article saved successfully!"
-      );
 
       if (onComplete) {
         onComplete();
@@ -203,7 +202,6 @@ const ArticleEditor = ({
     );
     setCodeSnippets(newCodeSnippets);
 
-    // Update content to remove the code snippet reference
     const newContent = content
       .split("\n")
       .filter((line) => !line.includes(`[code-snippet-${snippetIndex}]`))
@@ -211,16 +209,20 @@ const ArticleEditor = ({
     setContent(newContent);
   };
 
+  const onSelectCategory = (value) => {
+    setCategory(value);
+    setFilteredTopics(TOPICS[value]);
+  };
+
   const renderFormattedContent = (text) => {
     return text.split("\n").map((line, index) => {
-      // Handle code snippets
-      if (line.startsWith("[code-snippet-")) {
+      if (features.codeSnippets && line.startsWith("[code-snippet-")) {
         const snippetIndex = parseInt(line.match(/\d+/)[0]);
         if (snippetIndex < codeSnippets.length) {
           return (
             <div key={index} className="code-preview">
               <div className="code-header">
-                <span> JavaScript </span>{" "}
+                <span> {syntaxHighlighterLanguage} </span>{" "}
                 <div className="code-header-actions">
                   <button
                     className="copy-btn"
@@ -241,8 +243,8 @@ const ArticleEditor = ({
                 </div>{" "}
               </div>{" "}
               <SyntaxHighlighter
-                language="javascript"
-                style={vscDarkPlus}
+                language={syntaxHighlighterLanguage}
+                style={syntaxHighlighterTheme}
                 showLineNumbers={true}
                 wrapLines={true}
                 customStyle={{
@@ -261,7 +263,6 @@ const ArticleEditor = ({
         return null;
       }
 
-      // Handle headings
       if (line.startsWith("# ")) {
         return <h1 key={index}> {line.substring(2)} </h1>;
       }
@@ -272,12 +273,10 @@ const ArticleEditor = ({
         return <h3 key={index}> {line.substring(4)} </h3>;
       }
 
-      // Handle bullet points
       if (line.startsWith("• ")) {
         return <li key={index}> {line.substring(2)} </li>;
       }
 
-      // Handle highlights and bold text
       const highlightRegex =
         /\[highlight=(#[a-fA-F0-9]{6})\](.*?)\[\/highlight\]/g;
       let parts = [];
@@ -317,8 +316,14 @@ const ArticleEditor = ({
   };
 
   return (
-    <div className="article-editor-overlay" onClick={handleCancel}>
-      <div className="article-editor" onClick={(e) => e.stopPropagation()}>
+    <div
+      className={`article-editor-overlay ${overlayClassName}`}
+      onClick={handleCancel}
+    >
+      <div
+        className={`article-editor ${className}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button className="editor-close-btn" onClick={handleCancel}>
           <FontAwesomeIcon icon={faTimes} />{" "}
         </button>{" "}
@@ -327,128 +332,188 @@ const ArticleEditor = ({
             <h2> {editMode ? "Edit Article" : "Write New Article"} </h2>{" "}
             <div className="editor-header-actions">
               <button
-                onClick={handleSaveArticle}
+                onClick={(e) => handleSaveArticle(e)}
                 className="header-btn header-save-btn"
               >
                 {" "}
-                {editMode ? "Save Changes" : "Save Article"}{" "}
+                {saveButtonText}{" "}
               </button>{" "}
               <button
                 onClick={handleCancel}
                 className="header-btn header-cancel-btn"
               >
-                Cancel{" "}
+                {" "}
+                {cancelButtonText}{" "}
               </button>{" "}
             </div>{" "}
           </div>{" "}
           <div className="editor-header">
             <input
               type="text"
-              placeholder="Article Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              placeholder={titlePlaceholder}
+              value={articleTitle}
+              onChange={(e) => setArticleTitle(e.target.value)}
               className="title-input"
-            />
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="category-select"
-            >
-              {" "}
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {" "}
-                  {cat}{" "}
-                </option>
-              ))}{" "}
-            </select>{" "}
-            <Select
-              value={selectedTopic}
-              onChange={(option) => {
-                setSelectedTopic(option);
-                setShowTopicError(false);
-              }}
-              options={TOPICS}
-              className={`topic-select-container ${
-                showTopicError ? "error" : ""
-              }`}
-              classNamePrefix="topic-select"
-              placeholder="Select Topic *"
-              isClearable
-              isSearchable
-            />
+            />{" "}
+            {features.categories && categories.length > 0 && (
+              <select
+                value={category}
+                onChange={(e) => onSelectCategory(e.target.value)}
+                className="category-select"
+              >
+                {" "}
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {" "}
+                    {cat}{" "}
+                  </option>
+                ))}{" "}
+              </select>
+            )}{" "}
+            {features.topics && (
+              <Select
+                value={selectedTopic}
+                onChange={(option) => {
+                  setSelectedTopic(option);
+                  setShowTopicError(false);
+                }}
+                options={filteredTopics.map((topic) => ({
+                  value: topic,
+                  label: topic,
+                }))}
+                className={`topic-select-container ${
+                  showTopicError ? "error" : ""
+                }`}
+                classNamePrefix="topic-select"
+                placeholder="Select Topic *"
+                isClearable
+                isSearchable
+              />
+            )}{" "}
           </div>{" "}
-          <div className="formatting-toolbar">
-            <button onClick={() => handleFormat("bold")} className="format-btn">
-              Bold{" "}
-            </button>{" "}
-            <button onClick={() => handleFormat("h1")} className="format-btn">
-              H1{" "}
-            </button>{" "}
-            <button onClick={() => handleFormat("h2")} className="format-btn">
-              H2{" "}
-            </button>{" "}
-            <button onClick={() => handleFormat("h3")} className="format-btn">
-              H3{" "}
-            </button>{" "}
-            <button
-              onClick={() => handleFormat("bullet")}
-              className="format-btn"
-            >
-              Bullet{" "}
-            </button>{" "}
-            <div className="color-picker-container">
+          {features.formatting && (
+            <div className="formatting-toolbar">
               <button
-                onClick={() => setShowColorPicker(!showColorPicker)}
+                onClick={() => handleFormat("bold")}
                 className="format-btn"
               >
-                Highlight{" "}
+                Bold{" "}
               </button>{" "}
-              {showColorPicker && (
-                <div className="color-picker">
-                  {" "}
-                  {colors.map((color) => (
-                    <button
-                      key={color.value}
-                      className="color-btn"
-                      style={{ backgroundColor: color.value }}
-                      onClick={() => handleFormat("highlight", color.value)}
-                      title={color.name}
-                    />
-                  ))}{" "}
-                </div>
-              )}{" "}
-            </div>{" "}
-          </div>{" "}
+              <button onClick={() => handleFormat("h1")} className="format-btn">
+                H1{" "}
+              </button>{" "}
+              <button onClick={() => handleFormat("h2")} className="format-btn">
+                H2{" "}
+              </button>{" "}
+              <button onClick={() => handleFormat("h3")} className="format-btn">
+                H3{" "}
+              </button>{" "}
+              <button
+                onClick={() => handleFormat("bullet")}
+                className="format-btn"
+              >
+                Bullet{" "}
+              </button>{" "}
+              <div className="color-picker-container">
+                <button
+                  onClick={() => setShowColorPicker(!showColorPicker)}
+                  className="format-btn"
+                >
+                  Highlight{" "}
+                </button>{" "}
+                {showColorPicker && (
+                  <div className="color-picker">
+                    {" "}
+                    {colors.map((color) => (
+                      <button
+                        key={color.value}
+                        className="color-btn"
+                        style={{ backgroundColor: color.value }}
+                        onClick={() => handleFormat("highlight", color.value)}
+                        title={color.name}
+                      />
+                    ))}{" "}
+                  </div>
+                )}{" "}
+              </div>{" "}
+            </div>
+          )}{" "}
         </div>{" "}
         <div className="editor-content">
           <div className="content-container">
             <textarea
-              placeholder="Write your article content here..."
+              placeholder={contentPlaceholder}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="content-input"
-            />
-            <div className="content-preview">
-              <h3> Preview </h3> {renderFormattedContent(content)}{" "}
-            </div>{" "}
+            />{" "}
+            {features.preview && (
+              <div className="content-preview">
+                <h3> {previewTitle} </h3> {renderFormattedContent(content)}{" "}
+              </div>
+            )}{" "}
           </div>{" "}
-          <div className="editor-section">
-            <h3> Add Code Snippets </h3>{" "}
-            <textarea
-              placeholder="Write your code snippet here..."
-              value={currentSnippet}
-              onChange={(e) => setCurrentSnippet(e.target.value)}
-              className="code-input"
-            />
-            <button onClick={addCodeSnippet} className="add-snippet-btn">
-              Add Code Snippet{" "}
-            </button>{" "}
-          </div>{" "}
+          {features.codeSnippets && (
+            <div className="editor-section">
+              <h3> Add Code Snippets </h3>{" "}
+              <textarea
+                placeholder={codeSnippetPlaceholder}
+                value={currentSnippet}
+                onChange={(e) => setCurrentSnippet(e.target.value)}
+                className="code-input"
+              />
+              <button onClick={addCodeSnippet} className="add-snippet-btn">
+                {" "}
+                {addSnippetButtonText}{" "}
+              </button>{" "}
+            </div>
+          )}{" "}
         </div>{" "}
       </div>{" "}
     </div>
   );
+};
+
+ArticleEditor.propTypes = {
+  editMode: PropTypes.bool,
+  article: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    content: PropTypes.string,
+    codeSnippets: PropTypes.arrayOf(PropTypes.string),
+    category: PropTypes.string,
+    topic: PropTypes.string,
+  }),
+  onComplete: PropTypes.func,
+  onClose: PropTypes.func,
+  onSave: PropTypes.func,
+  categories: PropTypes.arrayOf(PropTypes.string),
+  topics: PropTypes.arrayOf(PropTypes.string),
+  features: PropTypes.shape({
+    codeSnippets: PropTypes.bool,
+    formatting: PropTypes.bool,
+    preview: PropTypes.bool,
+    categories: PropTypes.bool,
+    topics: PropTypes.bool,
+  }),
+  syntaxHighlighterTheme: PropTypes.object,
+  syntaxHighlighterLanguage: PropTypes.string,
+  className: PropTypes.string,
+  overlayClassName: PropTypes.string,
+  title: PropTypes.string,
+  titlePlaceholder: PropTypes.string,
+  contentPlaceholder: PropTypes.string,
+  codeSnippetPlaceholder: PropTypes.string,
+  saveButtonText: PropTypes.string,
+  cancelButtonText: PropTypes.string,
+  addSnippetButtonText: PropTypes.string,
+  previewTitle: PropTypes.string,
+  colors: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ),
 };
 
 export default ArticleEditor;
