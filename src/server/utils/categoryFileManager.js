@@ -103,8 +103,16 @@ async function saveArticleToCategory(article) {
     await updateCategoriesList(originalCategory);
 
     // Try to read existing articles
-    const existingData = await fs.readFile(filePath, "utf8");
-    const articles = JSON.parse(existingData);
+    let articles = [];
+    try {
+      const existingData = await fs.readFile(filePath, "utf8");
+      articles = JSON.parse(existingData);
+    } catch (error) {
+      if (error.code !== "ENOENT") {
+        throw error;
+      }
+      // File doesn't exist yet, will create with empty array
+    }
 
     let savedArticle;
     // Update existing article or add new one
@@ -127,16 +135,6 @@ async function saveArticleToCategory(article) {
     await fs.writeFile(filePath, JSON.stringify(articles, null, 2));
     return savedArticle;
   } catch (error) {
-    if (error.code === "ENOENT") {
-      // File doesn't exist, create new file with single article
-      const savedArticle = {
-        ...newArticle,
-        createdAt: new Date().toISOString(),
-      };
-      const articles = [savedArticle];
-      await fs.writeFile(filePath, JSON.stringify(articles, null, 2));
-      return savedArticle;
-    }
     throw error;
   }
 }

@@ -121,16 +121,18 @@ const DisplayArticle = ({
             >
               <h3> {article.title} </h3>{" "}
               <div className="article-topic"> {article.topic} </div>{" "}
-              <div className="article-actions">
-                <FaEdit
-                  className="icon edit"
-                  onClick={(e) => handleEditArticle(article, e)}
-                />{" "}
-                <FaTrash
-                  className="icon delete"
-                  onClick={(e) => handleDeleteArticle(article.id, e, article)}
-                />{" "}
-              </div>{" "}
+              {process.env.REACT_APP_IS_ADMIN === "true" && (
+                <div className="article-actions">
+                  <FaEdit
+                    className="icon edit"
+                    onClick={(e) => handleEditArticle(article, e)}
+                  />{" "}
+                  <FaTrash
+                    className="icon delete"
+                    onClick={(e) => handleDeleteArticle(article.id, e, article)}
+                  />{" "}
+                </div>
+              )}{" "}
             </div>
           ))}{" "}
         </div>{" "}

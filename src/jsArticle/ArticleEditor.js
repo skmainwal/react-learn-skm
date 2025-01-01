@@ -5,7 +5,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { faTimes, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CATEGORIES, TOPICS } from "./utils/contant";
+import { CATEGORIES, TOPICS, TECH_STACK_CATEGORIES } from "./utils/contant";
 import "./ArticleEditor.css";
 
 const ArticleEditor = ({
@@ -70,11 +70,12 @@ const ArticleEditor = ({
   }, [editMode, article, categories]);
 
   useEffect(() => {
-    const topicsForCategory = TOPICS[serviceType] || [];
+    const topicsForCategory =
+      TOPICS[TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS] || [];
     setFilteredTopics(topicsForCategory);
-    if (selectedTopic && !topicsForCategory.includes(selectedTopic.value)) {
-      setSelectedTopic(null);
-    }
+    // if (selectedTopic && !topicsForCategory.includes(selectedTopic.value)) {
+    //   setSelectedTopic(null);
+    // }
   }, [serviceType, selectedTopic]);
 
   const handleCopyCode = (code, index) => {
@@ -233,13 +234,15 @@ const ArticleEditor = ({
                     {" "}
                     {copiedIndex === snippetIndex ? "Copied!" : "Copy"}{" "}
                   </button>{" "}
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteSnippet(snippetIndex)}
-                    title="Delete snippet"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />{" "}
-                  </button>{" "}
+                  {process.env.REACT_APP_IS_ADMIN === "true" && (
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDeleteSnippet(snippetIndex)}
+                      title="Delete snippet"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />{" "}
+                    </button>
+                  )}{" "}
                 </div>{" "}
               </div>{" "}
               <SyntaxHighlighter

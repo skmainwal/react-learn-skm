@@ -8,6 +8,8 @@ import NavigationBar from "./components/nav/NavigationBar";
 import ReactQuestions from "./pages/ReactQuestions/ReactQuestions";
 import JavaScriptQuestions from "./pages/JavaScriptQuestions/JavaScriptQuestions";
 import JavaScriptArticles from "./pages/JavaScriptArticles/JavaScriptArticles";
+import PythonQuestions from "./pages/python/PythonQuestions";
+import { TECH_STACK_CATEGORIES } from "./jsArticle/utils/contant";
 import { ArticleEditor } from "./jsArticle";
 import { articleService } from "./services/articleService";
 
@@ -15,6 +17,7 @@ const TAB_COMPONENTS = {
   "JavaScript Q&A": JavaScriptQuestions,
   "JavaScript Basics": JavaScriptArticles,
   React: ReactQuestions,
+  Python: PythonQuestions,
 };
 
 const MainContent = ({ activeTab, reloadKey }) => {
@@ -23,7 +26,9 @@ const MainContent = ({ activeTab, reloadKey }) => {
 };
 
 function App() {
-  const [activeTab, setActiveTab] = useState("JavaScript Basics");
+  const [activeTab, setActiveTab] = useState(
+    TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS
+  );
   const [showEditor, setShowEditor] = useState(false);
   const [error, setError] = useState(null);
   const [reloadKey, setReloadKey] = useState(0);

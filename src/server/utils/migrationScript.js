@@ -39,10 +39,9 @@ async function migrateArticlesToCategories() {
       console.log(`Created category file: ${categoryFilePath}`);
     }
 
-    // Rename the original articles.json to articles.json.backup
-    const backupPath = path.join(DATA_DIR, "articles.json.backup");
-    await fs.rename(ARTICLES_FILE, backupPath);
-    console.log(`Original articles.json backed up to ${backupPath}`);
+    // Delete the original articles.json since we've migrated all data
+    await fs.unlink(ARTICLES_FILE);
+    console.log(`Original articles.json deleted`);
 
     console.log("Migration completed successfully!");
   } catch (error) {
