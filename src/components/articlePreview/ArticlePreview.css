@@ -29,9 +29,10 @@
 
 .code-preview {
     margin: 15px 0;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #1E1E1E;
 }
 
 .code-header {
@@ -39,19 +40,133 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    background-color: #1E1E1E;
-    /* border-bottom: 1px solid #ddd; */
+    background-color: #2d2d2d;
+    color: white;
 }
 
-.copy-btn {
-    padding: 4px 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #1E1E1E;
-    cursor: pointer;
+.code-header span {
+    color: #D4D4D4;
     font-size: 0.9em;
 }
 
+.copy-btn {
+    padding: 4px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
 .copy-btn:hover {
-    background-color: #f0f0f0;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+/* Code Syntax Highlighting */
+
+.code-preview pre {
+    margin: 0 !important;
+    padding: 1rem !important;
+    background-color: #1E1E1E !important;
+}
+
+.code-preview code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #D4D4D4 !important;
+}
+
+
+/* VS Code Dark+ Theme Colors */
+
+.code-preview .token.keyword {
+    color: #569cd6 !important;
+}
+
+.code-preview .token.string {
+    color: #ce9178 !important;
+}
+
+.code-preview .token.function {
+    color: #dcdcaa !important;
+}
+
+.code-preview .token.number {
+    color: #b5cea8 !important;
+}
+
+.code-preview .token.operator {
+    color: #d4d4d4 !important;
+}
+
+.code-preview .token.comment {
+    color: #6a9955 !important;
+}
+
+.code-preview .token.punctuation {
+    color: #d4d4d4 !important;
+}
+
+.code-preview .token.property {
+    color: #9cdcfe !important;
+}
+
+.code-preview .token.variable {
+    color: #9cdcfe !important;
+}
+
+.code-preview .token.class-name {
+    color: #4ec9b0 !important;
+}
+
+.code-preview .token.boolean {
+    color: #569cd6 !important;
+}
+
+.code-preview .token.constant {
+    color: #4fc1ff !important;
+}
+
+.code-preview .token.regex {
+    color: #d16969 !important;
+}
+
+.code-preview .token.symbol {
+    color: #569cd6 !important;
+}
+
+.code-preview .token.builtin {
+    color: #4ec9b0 !important;
+}
+
+.code-preview .token.attr-name {
+    color: #9cdcfe !important;
+}
+
+.code-preview .token.attr-value {
+    color: #ce9178 !important;
+}
+
+.code-preview .token.doctype {
+    color: #808080 !important;
+}
+
+.code-preview .token.important {
+    color: #569cd6 !important;
+}
+
+.video-preview {
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #000;
+}
+
+.video-preview iframe {
+    display: block;
+    margin: 0 auto;
 }

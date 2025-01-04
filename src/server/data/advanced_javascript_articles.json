@@ -103,5 +103,20 @@
     "createdAt": "2025-01-04T10:18:32.979Z",
     "id": 1735985851549000,
     "lastEdited": "2025-01-04T10:18:32.990Z"
+  },
+  {
+    "title": " Event Loop in JavaScript",
+    "content": "The Event Loop in JavaScript is a **mechanism that ensures asynchronous operations** (like setTimeout, promises, etc.) are handled in a way that** doesn't block the execution of the main thread**. It allows JavaScript to perform non-blocking I/O and execute callbacks when certain tasks (like a timer or a data fetch) are completed.\n\n\n[video-0]\n\n### How It Works \n**1. JavaScript is Single-Threaded:**\n• JavaScript has one thread for executing code (the call stack). It can only do one thing at a time.\n**2. Handling Asynchronous Tasks:**\n• When you perform an asynchronous operation (e.g., using setTimeout or fetching data), the operation is handed off to the browser (or Node.js) environment.\n• Once the operation completes, its callback is sent to the callback queue or the microtask queue, depending on the task type.\n**3. Event Loop's Role:**\n• The event loop continuously monitors the call stack and the queues (callback queue, microtask queue).\n• If the call stack is empty, the event loop picks tasks from the queues and moves them to the call stack for execution.\n**4. Microtask Queue vs Callback Queue:**\n• Microtasks (e.g., Promise.then, MutationObserver) are executed before callbacks from the callback queue (e.g., setTimeout, setInterval).\n\n### Step-by-Step Process of the Event Loop:\n1. The call stack executes synchronous code.\n2. When an asynchronous task is encountered, it's handed off to the browser environment or Node.js (e.g., a timer for setTimeout).\n3. Once the asynchronous task completes, its callback is placed in the appropriate queue:\n• Microtask Queue (e.g., Promises).\n• Callback Queue (e.g., setTimeout).\n4. The event loop checks if the call stack is empty.\n• If yes, it first processes microtasks.\n• Then, it processes tasks from the callback queue.\n5. This cycle continues endlessly.\n\n[code-snippet-0]\n\n### Summary of Key Points:\n• Synchronous tasks run on the call stack immediately.\n• Asynchronous tasks are deferred to queues and executed later by the event loop.\n• Microtasks (e.g., Promises) have higher priority than callbacks (e.g., setTimeout).\n• The event loop ensures the browser or Node.js never freezes while handling tasks.\n",
+    "codeSnippets": [
+      "console.log(\"Start\"); // Synchronous code - executed first\n\nsetTimeout(() => {\n  console.log(\"Timeout callback\"); // Asynchronous task, goes to callback queue\n}, 0);\n\nPromise.resolve().then(() => {\n  console.log(\"Promise resolved\"); // Microtask, goes to microtask queue\n});\n\nconsole.log(\"End\"); // Synchronous code - executed before async callbacks\n"
+    ],
+    "videoUrls": [
+      "https://youtu.be/eiC58R16hb8?si=8CfDAI6rILeoPgQy"
+    ],
+    "category": "Advanced JavaScript",
+    "topic": "Event Loop",
+    "createdAt": "2025-01-04T19:03:24.326Z",
+    "id": 1736016859832000,
+    "lastEdited": "2025-01-04T19:03:24.375Z"
   }
 ]

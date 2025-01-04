@@ -14,10 +14,41 @@ const ArticlePreview = ({ article }) => {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
+  const getYouTubeVideoId = (url) => {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
   const renderContent = () => {
     if (!article.content) return null;
 
     return article.content.split("\n").map((line, index) => {
+      if (line.startsWith("[video-")) {
+        const videoIndex = parseInt(line.match(/\d+/)[0]);
+        const videoUrls = article.videoUrls || [];
+        if (videoIndex < videoUrls.length) {
+          const videoId = getYouTubeVideoId(videoUrls[videoIndex]);
+          if (videoId) {
+            return (
+              <div key={index} className="video-preview">
+                <iframe
+                  width="100%"
+                  height="400"
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>{" "}
+              </div>
+            );
+          }
+        }
+        return null;
+      }
+
       if (line.startsWith("[code-snippet-")) {
         const snippetIndex = parseInt(line.match(/\d+/)[0]);
         const codeSnippets = article.codeSnippets || [];
@@ -38,10 +69,12 @@ const ArticlePreview = ({ article }) => {
               <SyntaxHighlighter
                 language="javascript"
                 style={vscDarkPlus}
-                showLineNumbers
+                showLineNumbers={true}
                 customStyle={{
                   margin: 0,
-                  borderRadius: "0 0 4px 4px",
+                  padding: "1rem",
+                  backgroundColor: "#1E1E1E",
+                  borderRadius: "0 0 8px 8px",
                 }}
               >
                 {codeSnippets[snippetIndex]}{" "}
@@ -49,6 +82,7 @@ const ArticlePreview = ({ article }) => {
             </div>
           );
         }
+        return null;
       }
 
       if (line.startsWith("# ")) {

@@ -22,6 +22,7 @@ const ArticleEditor = ({
     preview: true,
     categories: true,
     topics: true,
+    videos: true,
   },
   syntaxHighlighterTheme = vscDarkPlus,
   syntaxHighlighterLanguage = "javascript",
@@ -31,9 +32,11 @@ const ArticleEditor = ({
   titlePlaceholder = "Article Title",
   contentPlaceholder = "Write your article content here...",
   codeSnippetPlaceholder = "Write your code snippet here...",
+  videoUrlPlaceholder = "Enter YouTube video URL here...",
   saveButtonText = "Save",
   cancelButtonText = "Cancel",
   addSnippetButtonText = "Add Code Snippet",
+  addVideoButtonText = "Add Video",
   previewTitle = "Preview",
   colors = [
     { name: "Yellow", value: "#fff3cd" },
@@ -56,12 +59,15 @@ const ArticleEditor = ({
   const [filteredTopics, setFilteredTopics] = useState(
     TOPICS[serviceType] || []
   );
+  const [currentVideoUrl, setCurrentVideoUrl] = useState("");
+  const [videoUrls, setVideoUrls] = useState([]);
 
   useEffect(() => {
     if (editMode && article) {
       setArticleTitle(article.title);
       setContent(article.content);
       setCodeSnippets([...article.codeSnippets]);
+      setVideoUrls(article.videoUrls || []);
       setCategory(article.category || categories[0] || "");
       setSelectedTopic(
         article.topic ? { value: article.topic, label: article.topic } : null
@@ -74,6 +80,7 @@ const ArticleEditor = ({
           setArticleTitle(draft.title || title);
           setContent(draft.content || "");
           setCodeSnippets(draft.codeSnippets || []);
+          setVideoUrls(draft.videoUrls || []);
           setCategory(draft.category || categories[0] || "");
           setSelectedTopic(
             draft.topic ? { value: draft.topic, label: draft.topic } : null
@@ -84,6 +91,7 @@ const ArticleEditor = ({
           setArticleTitle(title);
           setContent("");
           setCodeSnippets([]);
+          setVideoUrls([]);
           setCategory(categories[0] || "");
           setSelectedTopic(null);
         }
@@ -91,6 +99,7 @@ const ArticleEditor = ({
         setArticleTitle(title);
         setContent("");
         setCodeSnippets([]);
+        setVideoUrls([]);
         setCategory(categories[0] || "");
         setSelectedTopic(null);
       }
@@ -147,6 +156,7 @@ const ArticleEditor = ({
       title: articleTitle,
       content,
       codeSnippets: features.codeSnippets ? codeSnippets : [],
+      videoUrls: features.videos ? videoUrls : [],
       ...(features.categories && { category }),
       ...(features.topics && {
         topic: selectedTopic ? selectedTopic.value : null,
@@ -166,6 +176,7 @@ const ArticleEditor = ({
       setArticleTitle("");
       setContent("");
       setCodeSnippets([]);
+      setVideoUrls([]);
       setCategory(categories[0] || "");
       setSelectedTopic(null);
       setShowTopicError(false);
@@ -261,8 +272,50 @@ const ArticleEditor = ({
     setFilteredTopics(TOPICS[value]);
   };
 
+  const getYouTubeVideoId = (url) => {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
+  const addVideo = () => {
+    if (currentVideoUrl.trim()) {
+      const videoId = getYouTubeVideoId(currentVideoUrl);
+      if (videoId) {
+        setVideoUrls([...videoUrls, currentVideoUrl]);
+        setContent(content + `\n[video-${videoUrls.length}]\n`);
+        setCurrentVideoUrl("");
+      } else {
+        alert("Please enter a valid YouTube video URL");
+      }
+    }
+  };
+
   const renderFormattedContent = (text) => {
     return text.split("\n").map((line, index) => {
+      if (line.startsWith("[video-")) {
+        const videoIndex = parseInt(line.match(/\d+/)[0]);
+        if (videoIndex < videoUrls.length) {
+          const videoId = getYouTubeVideoId(videoUrls[videoIndex]);
+          if (videoId) {
+            return (
+              <div key={index} className="video-preview">
+                <iframe
+                  width="100%"
+                  height="400"
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>{" "}
+              </div>
+            );
+          }
+        }
+        return null;
+      }
       if (features.codeSnippets && line.startsWith("[code-snippet-")) {
         const snippetIndex = parseInt(line.match(/\d+/)[0]);
         if (snippetIndex < codeSnippets.length) {
@@ -502,6 +555,24 @@ const ArticleEditor = ({
               </div>
             )}{" "}
           </div>{" "}
+          {features.videos && (
+            <div className="editor-section">
+              <h3> Add Video </h3>{" "}
+              <div className="video-input-container">
+                <input
+                  type="text"
+                  placeholder={videoUrlPlaceholder}
+                  value={currentVideoUrl}
+                  onChange={(e) => setCurrentVideoUrl(e.target.value)}
+                  className="video-input"
+                />
+                <button onClick={addVideo} className="add-video-btn">
+                  {" "}
+                  {addVideoButtonText}{" "}
+                </button>{" "}
+              </div>{" "}
+            </div>
+          )}{" "}
           {features.codeSnippets && (
             <div className="editor-section">
               <h3> Add Code Snippets </h3>{" "}
@@ -544,6 +615,7 @@ ArticleEditor.propTypes = {
     preview: PropTypes.bool,
     categories: PropTypes.bool,
     topics: PropTypes.bool,
+    videos: PropTypes.bool,
   }),
   syntaxHighlighterTheme: PropTypes.object,
   syntaxHighlighterLanguage: PropTypes.string,
@@ -553,9 +625,11 @@ ArticleEditor.propTypes = {
   titlePlaceholder: PropTypes.string,
   contentPlaceholder: PropTypes.string,
   codeSnippetPlaceholder: PropTypes.string,
+  videoUrlPlaceholder: PropTypes.string,
   saveButtonText: PropTypes.string,
   cancelButtonText: PropTypes.string,
   addSnippetButtonText: PropTypes.string,
+  addVideoButtonText: PropTypes.string,
   previewTitle: PropTypes.string,
   colors: PropTypes.arrayOf(
     PropTypes.shape({

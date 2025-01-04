@@ -557,3 +557,46 @@
 .code-preview .token.important {
     color: #569cd6 !important;
 }
+
+.video-preview {
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.video-input-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.video-input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.video-input:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+.add-video-btn {
+    padding: 0.8rem 1.5rem;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.add-video-btn:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
