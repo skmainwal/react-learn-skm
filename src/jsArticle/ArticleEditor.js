@@ -66,17 +66,55 @@ const ArticleEditor = ({
       setSelectedTopic(
         article.topic ? { value: article.topic, label: article.topic } : null
       );
+    } else if (!editMode) {
+      const savedDraft = localStorage.getItem("articleDraft");
+      if (savedDraft) {
+        try {
+          const draft = JSON.parse(savedDraft);
+          setArticleTitle(draft.title || title);
+          setContent(draft.content || "");
+          setCodeSnippets(draft.codeSnippets || []);
+          setCategory(draft.category || categories[0] || "");
+          setSelectedTopic(
+            draft.topic ? { value: draft.topic, label: draft.topic } : null
+          );
+        } catch (error) {
+          console.error("Error loading draft:", error);
+          localStorage.removeItem("articleDraft");
+          setArticleTitle(title);
+          setContent("");
+          setCodeSnippets([]);
+          setCategory(categories[0] || "");
+          setSelectedTopic(null);
+        }
+      } else {
+        setArticleTitle(title);
+        setContent("");
+        setCodeSnippets([]);
+        setCategory(categories[0] || "");
+        setSelectedTopic(null);
+      }
     }
-  }, [editMode, article, categories]);
+  }, [editMode, article, categories, title]);
 
   useEffect(() => {
     const topicsForCategory =
       TOPICS[TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS] || [];
     setFilteredTopics(topicsForCategory);
-    // if (selectedTopic && !topicsForCategory.includes(selectedTopic.value)) {
-    //   setSelectedTopic(null);
-    // }
   }, [serviceType, selectedTopic]);
+
+  useEffect(() => {
+    if (!editMode && (articleTitle || content || codeSnippets.length > 0)) {
+      const draft = {
+        title: articleTitle,
+        content,
+        codeSnippets,
+        category,
+        topic: selectedTopic ? selectedTopic.value : null,
+      };
+      localStorage.setItem("articleDraft", JSON.stringify(draft));
+    }
+  }, [articleTitle, content, codeSnippets, category, selectedTopic, editMode]);
 
   const handleCopyCode = (code, index) => {
     navigator.clipboard.writeText(code);
@@ -121,7 +159,10 @@ const ArticleEditor = ({
         await onSave(articleData, editMode);
       }
 
-      // Reset form
+      if (!editMode) {
+        localStorage.removeItem("articleDraft");
+      }
+
       setArticleTitle("");
       setContent("");
       setCodeSnippets([]);
@@ -141,6 +182,11 @@ const ArticleEditor = ({
   };
 
   const handleCancel = () => {
+    if (!editMode && (articleTitle || content || codeSnippets.length > 0)) {
+      if (window.confirm("Do you want to clear your draft article?")) {
+        localStorage.removeItem("articleDraft");
+      }
+    }
     if (onComplete) {
       onComplete();
     }

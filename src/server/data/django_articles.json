@@ -7,5 +7,16 @@
     "topic": "Django Basics",
     "createdAt": "2025-01-01T10:21:12.506Z",
     "id": 1735726872503000
+  },
+  {
+    "title": "Django Test ",
+    "content": "Yo..\n[code-snippet-0]\n",
+    "codeSnippets": [
+      "const obj = {\n  name: \"Alice\",\n  details: {\n    age: 25,\n    city: \"Wonderland\",\n  },\n};\n\n// Freeze only the \"details\" key\nObject.defineProperty(obj, \"details\", {\n  writable: false,    // Prevents reassignment of the \"details\" key\n  configurable: false // Prevents deletion or redefinition\n});\n\n// Attempt to reassign \"details\"\nobj.details = {}; // This will not work\n\n// To freeze the nested \"details\" object\nObject.freeze(obj.details);\n\n// Attempt to modify the nested \"details\" object\nobj.details.city = \"Dreamland\"; // This will not work\nconsole.log(obj.details.city); \n// Output: Wonderland\n"
+    ],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-01-01T17:39:44.651Z",
+    "id": 1735753184649000
   }
 ]

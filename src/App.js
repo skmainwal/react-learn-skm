@@ -13,6 +13,7 @@ import { TECH_STACK_CATEGORIES } from "./jsArticle/utils/contant";
 import { ArticleEditor } from "./jsArticle";
 import { articleService } from "./services/articleService";
 import DjangoQuestions from "./pages/django/DjangoQuestions";
+import AdvanceJavascript from "./pages/advanceJavascript/AdvanceJavascript";
 
 const TAB_COMPONENTS = {
   "JavaScript Q&A": JavaScriptQuestions,
@@ -20,6 +21,7 @@ const TAB_COMPONENTS = {
   React: ReactQuestions,
   Python: PythonQuestions,
   Django: DjangoQuestions,
+  "Advanced JavaScript": AdvanceJavascript,
 };
 
 const MainContent = ({ activeTab, reloadKey }) => {
@@ -41,6 +43,13 @@ function App() {
       key: TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS,
       icon: faPenToSquare,
       onClick: () => handleTabChange(TECH_STACK_CATEGORIES.JAVASCRIPT_BASICS),
+    },
+
+    {
+      name: TECH_STACK_CATEGORIES.ADVANCED_JAVASCRIPT,
+      key: TECH_STACK_CATEGORIES.ADVANCED_JAVASCRIPT,
+      icon: faPenToSquare,
+      onClick: () => handleTabChange(TECH_STACK_CATEGORIES.ADVANCED_JAVASCRIPT),
     },
     {
       name: TECH_STACK_CATEGORIES.REACT,

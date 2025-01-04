@@ -23,10 +23,10 @@
       "if (true) {\n  var z = 30;\n  console.log(z); // Output: 30\n}\nconsole.log(z); // Output: 30 (because `var` is not block-scoped)\n"
     ],
     "category": "JavaScript Basics",
-    "topic": "let, const, var",
-    "createdAt": "2024-12-31T14:58:40.184Z",
+    "topic": "Variables & Data Types",
+    "createdAt": "2025-01-02T20:37:19.226Z",
     "id": 1735657031320,
-    "lastEdited": "2024-12-31T14:58:40.192Z"
+    "lastEdited": "2025-01-02T20:37:19.245Z"
   },
   {
     "title": "Coding Question on Scoping ",
@@ -45,10 +45,10 @@
       "for (let i = 0; i < 3; i++) {\n  setTimeout(function() {\n    console.log(i);\n  }, 100);\n}\n"
     ],
     "category": "JavaScript Basics",
-    "topic": "Scope",
-    "createdAt": "2024-12-31T16:08:48.484Z",
+    "topic": "Scope & Hoisting",
+    "createdAt": "2025-01-04T05:07:52.804Z",
     "id": 1735657438741,
-    "lastEdited": "2024-12-31T16:08:48.489Z"
+    "lastEdited": "2025-01-04T05:07:52.813Z"
   },
   {
     "title": "What is the Temporal Dead Zone (TDZ) in JavaScript?",
@@ -72,10 +72,10 @@
       "for (let i = 0; i < 3; i++) {\n  console.log(i); // Output: 0, 1, 2\n}\n\nconsole.log(i); // Error: i is not defined (Cannot access i outside the loop)\n"
     ],
     "category": "JavaScript Basics",
-    "topic": "Scope",
-    "createdAt": "2024-12-31T16:00:33.982Z",
+    "topic": "Scope & Hoisting",
+    "createdAt": "2025-01-04T05:08:05.772Z",
     "id": 1735660699772,
-    "lastEdited": "2024-12-31T16:00:33.987Z"
+    "lastEdited": "2025-01-04T05:08:05.780Z"
   },
   {
     "title": "Difference Between Function-scoped and Block-scoped Variables",
@@ -85,9 +85,10 @@
       "function test() {\n  if (true) {\n    let y = 20;  // Block-scoped\n    const z = 30;  // Block-scoped\n    console.log(y);  // Output: 20\n    console.log(z);  // Output: 30\n  }\n  console.log(y);  // Error: y is not defined\n  console.log(z);  // Error: z is not defined\n}\n\ntest();\n"
     ],
     "category": "JavaScript Basics",
-    "topic": "Scope",
-    "createdAt": "2024-12-31T16:06:48.855Z",
-    "id": 1735661208855
+    "topic": "Scope & Hoisting",
+    "createdAt": "2025-01-04T05:08:15.320Z",
+    "id": 1735661208855,
+    "lastEdited": "2025-01-04T05:08:15.330Z"
   },
   {
     "title": "What is Scoping in JavaScript?",
@@ -98,10 +99,10 @@
       "if (true) {\n  let y = 10;  // Block-scoped\n  console.log(y);  // Output: 10\n}\n\nconsole.log(y);  // Error: y is not defined (y can't be accessed outside the block)\n"
     ],
     "category": "JavaScript Basics",
-    "topic": "Scope",
-    "createdAt": "2024-12-31T16:41:34.651Z",
+    "topic": "Scope & Hoisting",
+    "createdAt": "2025-01-04T05:08:25.880Z",
     "id": 1735661805675,
-    "lastEdited": "2024-12-31T16:41:34.663Z"
+    "lastEdited": "2025-01-04T05:08:25.891Z"
   },
   {
     "title": " What is Lexical Scope ?",
@@ -111,10 +112,10 @@
       "function createCounter() {\n  let count = 0;\n\n  return function increment() {\n    count++;  // This function can access 'count' because of lexical scope\n    console.log(count);\n  };\n}\n\nconst counter1 = createCounter();\nconst counter2 = createCounter();\n\ncounter1();  // Output: 1\ncounter1();  // Output: 2\ncounter2();  // Output: 1 (counter2 has its own 'count' variable)\n"
     ],
     "category": "JavaScript Basics",
-    "topic": "Scope",
-    "createdAt": "2024-12-31T17:03:13.980Z",
+    "topic": "Scope & Hoisting",
+    "createdAt": "2025-01-04T05:08:38.558Z",
     "id": 1735664529821,
-    "lastEdited": "2024-12-31T17:03:13.986Z"
+    "lastEdited": "2025-01-04T05:08:38.577Z"
   },
   {
     "title": " Shallow Copy vs. Deep Copy",
@@ -140,5 +141,24 @@
     "topic": "Objects",
     "createdAt": "2025-01-01T17:34:00.752Z",
     "id": 1735752840748000
+  },
+  {
+    "title": "Check type of function , class  and object ",
+    "content": "### it behaves differently for functions, classes, and objects\n** 1. Checking the Type of a Function**\n[code-snippet-0]\n**2. Checking the Type of a Class**\n[code-snippet-1]\n\n**3. Checking the Type of an Object**\n[code-snippet-2]\n\n** For null, typeof also incorrectly returns \"object\" due to a legacy bug in JavaScript:**\n\n\n[code-snippet-3]\n### Distinguish Class and Function\n**• Use the Function.prototype.toString method**\n[code-snippet-6]\n\n### Distinguish Object and Function\n• Use typeof and check for the presence of a constructor:\n\n[code-snippet-7]\n",
+    "codeSnippets": [
+      "function myFunction() {}\nconsole.log(typeof myFunction); \n// Output: \"function\"\n",
+      "class MyClass {}\nconsole.log(typeof MyClass); \n// Output: \"function\"\n",
+      "const myObject = { name: \"Alice\", age: 25 };\nconsole.log(typeof myObject); \n// Output: \"object\"\n",
+      "console.log(typeof null);\n// Output: \"object\"\n",
+      "function myFunction() {}\nclass MyClass {}\n\nconsole.log(myFunction.toString().startsWith(\"class\")); \n// Output: false (It's a normal function)\n\nconsole.log(MyClass.toString().startsWith(\"class\")); \n// Output: true (It's a class)\n",
+      "function myFunction() {}\nclass MyClass {}\n\nconsole.log(myFunction.toString().startsWith(\"class\")); \n// Output: false (It's a normal function)\n\nconsole.log(MyClass.toString().startsWith(\"class\")); \n// Output: true (It's a class)\n",
+      "function myFunction() {}\nclass MyClass {}\n\nconsole.log(myFunction.toString().startsWith(\"class\")); \n// Output: false (It's a normal function)\n\nconsole.log(MyClass.toString().startsWith(\"class\")); \n// Output: true (It's a class)\n",
+      "const myFunction = function () {};\nconst myObject = {};\n\nconsole.log(typeof myFunction === \"function\" && myFunction.constructor === Function); \n// Output: true (It's a function)\n\nconsole.log(typeof myObject === \"object\" && myObject.constructor === Object); \n// Output: true (It's an object)\n"
+    ],
+    "category": "JavaScript Basics",
+    "topic": "Variables & Data Types",
+    "createdAt": "2025-01-02T20:10:44.016Z",
+    "id": 1735848575344000,
+    "lastEdited": "2025-01-02T20:10:44.066Z"
   }
 ]
