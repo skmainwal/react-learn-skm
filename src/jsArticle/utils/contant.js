@@ -39,6 +39,7 @@ export const TECH_STACK_CATEGORIES = {
   HTML: "html",
   CSS: "css",
   DJANGO: "Django",
+  PLAY_GROUND: "Play Ground",
 
   ES6_FEATURES: "ES6+ Features",
   DOM_MANIPULATION: "DOM Manipulation",

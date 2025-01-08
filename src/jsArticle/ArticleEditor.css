@@ -14,12 +14,11 @@
 
 .article-editor {
     background: white;
-    border-radius: 12px;
+    border-radius: 0;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     padding: 0;
-    width: 90%;
-    max-width: 1200px;
-    max-height: 90vh;
+    width: 100%;
+    height: 100vh;
     overflow-y: auto;
     position: relative;
     animation: slideIn 0.3s ease-out;
@@ -70,7 +69,7 @@
     top: 0;
     z-index: 10;
     background: white;
-    border-radius: 12px 12px 0 0;
+    border-radius: 0;
     padding: 2rem 2rem 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
@@ -209,7 +208,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-bottom: 2rem;
-    height: calc(100vh - 450px);
+    height: calc(100vh - 250px);
     min-height: 400px;
 }
 

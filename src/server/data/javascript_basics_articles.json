@@ -160,5 +160,54 @@
     "createdAt": "2025-01-02T20:10:44.016Z",
     "id": 1735848575344000,
     "lastEdited": "2025-01-02T20:10:44.066Z"
+  },
+  {
+    "title": "Array Basics",
+    "content": "### Array Methods:\n1. unshift()\n•  Adds one or more elements to the beginning of the array.\n[code-snippet-0]\n 2. shift()\n• Removes the first element from the array and returns it.\n[code-snippet-1]\n3. slice()\n• Returns a shallow copy of a portion of an array into a new array.\n[code-snippet-2]\n4. splice()\n• Adds or removes elements at a specific index.\n[code-snippet-3]\n5. concat()\n• Combines two or more arrays into a new array.\n[code-snippet-4]\n6. map()\n• Creates a new array by applying a function to each element.\n[code-snippet-5]\n7. filter()\n• Returns a new array containing elements that satisfy a condition.\n[code-snippet-6]\n8. reduce()\n • Reduces the array to a single value using a callback function.\n[code-snippet-7]\n9. sort()\n• Sorts the array in place.\n[code-snippet-8]\n\n10. reverse()\n • Reverses the order of the elements in place.\n[code-snippet-9]\n\n11. join()\n• Joins the elements into a string with a specified separator.\n\n[code-snippet-10]\n",
+    "codeSnippets": [
+      "const fruits = ['banana', 'cherry'];\nfruits.unshift('apple');\nconsole.log(fruits); // ['apple', 'banana', 'cherry']\n",
+      "const fruits = ['apple', 'banana', 'cherry'];\nconst firstFruit = fruits.shift();\nconsole.log(firstFruit); // 'apple'\nconsole.log(fruits);     // ['banana', 'cherry']\n",
+      "const arr = [1, 2, 3, 4];\nconsole.log(\"Before slice:\", arr); // [1, 2, 3, 4]\nconst sliced = arr.slice(1, 3); \nconsole.log(\"After slice:\", arr);  // [1, 2, 3, 4]\nconsole.log(\"Sliced portion:\", sliced); // [2, 3]\n",
+      "const arr = [1, 2, 3];\nconsole.log(\"Before splice:\", arr); // [1, 2, 3]\narr.splice(1, 1, \"a\", \"b\"); // Replaces element at index 1 with \"a\" and \"b\"\nconsole.log(\"After splice:\", arr);  // [1, 'a', 'b', 3]\n",
+      "const arr1 = [1, 2];\nconst arr2 = [3, 4];\nconsole.log(\"Before concat:\", arr1, arr2); // [1, 2] [3, 4]\nconst combined = arr1.concat(arr2);\nconsole.log(\"After concat (original):\", arr1); // [1, 2]\nconsole.log(\"New array:\", combined);          // [1, 2, 3, 4]\n",
+      "const arr = [1, 2, 3];\nconsole.log(\"Before map:\", arr); // [1, 2, 3]\nconst squared = arr.map(num => num ** 2);\nconsole.log(\"After map (original):\", arr);  // [1, 2, 3]\nconsole.log(\"Mapped array:\", squared);      // [1, 4, 9]\n",
+      "const arr = [1, 2, 3, 4];\nconsole.log(\"Before filter:\", arr); // [1, 2, 3, 4]\nconst even = arr.filter(num => num % 2 === 0);\nconsole.log(\"After filter (original):\", arr);  // [1, 2, 3, 4]\nconsole.log(\"Filtered array:\", even);          // [2, 4]\n",
+      "const arr = [1, 2, 3, 4];\nconsole.log(\"Before reduce:\", arr); // [1, 2, 3, 4]\nconst sum = arr.reduce((acc, num) => acc + num, 0);\nconsole.log(\"After reduce (original):\", arr); // [1, 2, 3, 4]\nconsole.log(\"Reduced value:\", sum);           // 10\n",
+      "const arr = [3, 1, 4, 2];\nconsole.log(\"Before sort:\", arr); // [3, 1, 4, 2]\narr.sort((a, b) => a - b); \nconsole.log(\"After sort:\", arr);  // [1, 2, 3, 4]\n",
+      "const arr = [1, 2, 3];\nconsole.log(\"Before reverse:\", arr); // [1, 2, 3]\narr.reverse();\nconsole.log(\"After reverse:\", arr);  // [3, 2, 1]\n",
+      "const arr = ['a', 'b', 'c'];\nconsole.log(\"Before join:\", arr); // ['a', 'b', 'c']\nconst joined = arr.join('-');\nconsole.log(\"After join (original):\", arr); // ['a', 'b', 'c']\nconsole.log(\"Joined string:\", joined);      // 'a-b-c'\n"
+    ],
+    "videoUrls": [],
+    "category": "JavaScript Basics",
+    "topic": "Arrays",
+    "createdAt": "2025-01-07T18:12:39.038Z",
+    "id": 1736273559033000
+  },
+  {
+    "title": "Write a function to merge two arrays, remove duplicates, and sort the result in ascending order.",
+    "content": "\n[code-snippet-0]\n\n[code-snippet-1]\n\n[code-snippet-2]\n",
+    "codeSnippets": [
+      "function mergeAndSortArrays(arr1, arr2) {\n    // Merge the two arrays\n    const mergedArray = [...arr1, ...arr2];\n    \n    // Remove duplicates using a Set\n    const uniqueArray = [...new Set(mergedArray)];\n    \n    // Sort the array in ascending order\n    uniqueArray.sort((a, b) => a - b);\n    \n    return uniqueArray;\n}\n\n// Example usage:\nconst array1 = [5, 3, 8, 1];\nconst array2 = [8, 6, 2, 3];\nconst result = mergeAndSortArrays(array1, array2);\nconsole.log(result); // Output: [1, 2, 3, 5, 6, 8]\n",
+      "function mergeAndSortArrays(arr1, arr2) {\n    const mergedArray = arr1.concat(arr2);\n    \n    // Remove duplicates using `filter`\n    const uniqueArray = mergedArray.filter((value, index) => mergedArray.indexOf(value) === index);\n    \n    // Sort the array in ascending order\n    uniqueArray.sort((a, b) => a - b);\n    \n    return uniqueArray;\n}\n\n// Example usage\nconsole.log(mergeAndSortArrays([5, 3, 8, 1], [8, 6, 2, 3])); // [1, 2, 3, 5, 6, 8]\n",
+      "function mergeAndSortArrays(arr1, arr2) {\n    const mergedArray = arr1.concat(arr2);\n    \n    // Use `reduce` to remove duplicates\n    const uniqueArray = mergedArray.reduce((acc, value) => {\n        if (!acc.includes(value)) {\n            acc.push(value);\n        }\n        return acc;\n    }, []);\n    \n    // Sort the array in ascending order\n    uniqueArray.sort((a, b) => a - b);\n    \n    return uniqueArray;\n}\n\n// Example usage\nconsole.log(mergeAndSortArrays([5, 3, 8, 1], [8, 6, 2, 3])); // [1, 2, 3, 5, 6, 8]\n"
+    ],
+    "videoUrls": [],
+    "category": "JavaScript Basics",
+    "topic": "Arrays",
+    "createdAt": "2025-01-07T18:30:29.733Z",
+    "id": 1736274629731000
+  },
+  {
+    "title": "To flatten an array ",
+    "content": "\n[code-snippet-0]\n\n[code-snippet-1]\n",
+    "codeSnippets": [
+      "const arr = [1, [2, [3, [4]]], 5];\nconsole.log(arr.flat(2));  // [1, 2, 3, [4], 5]\n",
+      "function deepFlatten(arr) {\n  return arr.reduce((flat, item) => \n    Array.isArray(item) ? flat.concat(deepFlatten(item)) : flat.concat(item), []\n  );\n}\n\nconst arr = [1, [2, [3, [4]]]];\nconsole.log(deepFlatten(arr));  // [1, 2, 3, 4]\n"
+    ],
+    "videoUrls": [],
+    "category": "JavaScript Basics",
+    "topic": "Arrays",
+    "createdAt": "2025-01-07T18:34:38.040Z",
+    "id": 1736274878035000
   }
 ]
