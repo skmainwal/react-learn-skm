@@ -15,6 +15,7 @@ import { articleService } from "./services/articleService";
 import DjangoQuestions from "./pages/django/DjangoQuestions";
 import AdvanceJavascript from "./pages/advanceJavascript/AdvanceJavascript";
 import PlayGround from "./playground/Playground";
+import FetchAPI from "./pages/FetchAPI/FetchAPI";
 
 const TAB_COMPONENTS = {
   "JavaScript Q&A": JavaScriptQuestions,
@@ -24,6 +25,7 @@ const TAB_COMPONENTS = {
   Django: DjangoQuestions,
   "Advanced JavaScript": AdvanceJavascript,
   "Play Ground": PlayGround,
+  "Fetch API": FetchAPI,
 };
 
 const MainContent = ({ activeTab, reloadKey }) => {
@@ -70,6 +72,12 @@ function App() {
       key: TECH_STACK_CATEGORIES.DJANGO,
       icon: faPython,
       onClick: () => handleTabChange(TECH_STACK_CATEGORIES.DJANGO),
+    },
+    {
+      name: TECH_STACK_CATEGORIES.FETCH_API,
+      key: TECH_STACK_CATEGORIES.FETCH_API,
+      icon: faPython,
+      onClick: () => handleTabChange(TECH_STACK_CATEGORIES.FETCH_API),
     },
     {
       name: TECH_STACK_CATEGORIES.PLAY_GROUND,

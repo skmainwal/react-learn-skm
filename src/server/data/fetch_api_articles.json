@@ -1,0 +1,89 @@
+[
+  {
+    "title": "Implement a Fetch API retry functionality",
+    "content": "\n[code-snippet-0]\n",
+    "codeSnippets": [
+      "async function fetchWithRetry(url, options = {}, retryDelay = 1000, maxRetries = 5) {\n  let attempts = 0;\n\n  while (true) {\n    try {\n      attempts++;\n      const response = await fetch(url, options);\n\n      if (!response.ok) {\n        throw new Error(`HTTP error! Status: ${response.status}`);\n      }\n\n      const data = await response.json();\n      console.log('Fetch succeeded:', data);\n      return data;\n    } catch (error) {\n      console.error(`Attempt ${attempts} failed:`, error);\n\n      if (attempts >= maxRetries) {\n        console.error('Max retries reached. Exiting...');\n        throw error;\n      }\n\n      await new Promise(resolve => setTimeout(resolve, retryDelay));\n    }\n  }\n}\n"
+    ],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "Making GET Requests",
+    "createdAt": "2025-01-16T19:08:53.696Z",
+    "id": 1737054533694000
+  },
+  {
+    "title": "Promise.all to call three APIs concurrently",
+    "content": "\n[code-snippet-0]\n\n[code-snippet-1]\n",
+    "codeSnippets": [
+      "async function fetchDataFromApis() {\n  // Define the API URLs\n  const api1 = 'https://api.example.com/data1';\n  const api2 = 'https://api.example.com/data2';\n  const api3 = 'https://api.example.com/data3';\n\n  try {\n    // Call all APIs concurrently\n    const [data1, data2, data3] = await Promise.all([\n      fetch(api1).then(response => {\n        if (!response.ok) throw new Error(`API 1 failed: ${response.status}`);\n        return response.json();\n      }),\n      fetch(api2).then(response => {\n        if (!response.ok) throw new Error(`API 2 failed: ${response.status}`);\n        return response.json();\n      }),\n      fetch(api3).then(response => {\n        if (!response.ok) throw new Error(`API 3 failed: ${response.status}`);\n        return response.json();\n      }),\n    ]);\n\n    // Process the data\n    console.log('API 1 Data:', data1);\n    console.log('API 2 Data:', data2);\n    console.log('API 3 Data:', data3);\n\n    // Return the collected data\n    return { data1, data2, data3 };\n  } catch (error) {\n    // Handle errors\n    console.error('Error fetching data:', error);\n    throw error; // Rethrow if you need to handle it further up the chain\n  }\n}\n\n// Usage\nfetchDataFromApis()\n  .then(result => console.log('All data fetched successfully:', result))\n  .catch(err => console.error('Error fetching APIs:', err));\n",
+      "const axios = require('axios');\n\nasync function fetchDataFromApis() {\n  // Define the API URLs\n  const api1 = 'https://api.example.com/data1';\n  const api2 = 'https://api.example.com/data2';\n  const api3 = 'https://api.example.com/data3';\n\n  try {\n    // Call all APIs concurrently\n    const [response1, response2, response3] = await Promise.all([\n      axios.get(api1),\n      axios.get(api2),\n      axios.get(api3),\n    ]);\n\n    // Extract data from the responses\n    const data1 = response1.data;\n    const data2 = response2.data;\n    const data3 = response3.data;\n\n    console.log('API 1 Data:', data1);\n    console.log('API 2 Data:', data2);\n    console.log('API 3 Data:', data3);\n\n    // Return the collected data\n    return { data1, data2, data3 };\n  } catch (error) {\n    // Handle errors\n    console.error('Error fetching data:', error);\n    throw error; // Rethrow if further handling is needed\n  }\n}\n\n// Usage\nfetchDataFromApis()\n  .then(result => console.log('All data fetched successfully:', result))\n  .catch(err => console.error('Error fetching APIs:', err));\n"
+    ],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "Making GET Requests",
+    "createdAt": "2025-01-16T19:21:48.279Z",
+    "id": 1737055308278000
+  },
+  {
+    "title": "Promise.all with  Custom Config for Each API",
+    "content": "**If each API requires custom headers or parameters, pass the configuration as the second argument to axios.get**",
+    "codeSnippets": [],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "Making GET Requests",
+    "createdAt": "2025-01-16T19:26:05.900Z",
+    "id": 1737055565898000
+  },
+  {
+    "title": "What is the difference between PUT and PATCH? When would you use each?",
+    "content": "The main difference between PUT and PATCH lies in how they update resources on a server\n### 1. PUT: Complete Update\n• If the resource exists, it is entirely replaced with the new data provided.\n• If the resource does not exist, it can create a new resource (depending on the API design).\n[code-snippet-0]\nAnd you want to update the user's details, using PUT requires sending the full resource, even if only one property changes: Request:\n[code-snippet-1]\n\n###  2. PATCH: Partial Update\n• Modifies only the specified fields of an existing resource.\n• If the resource doesn't exist, PATCH will typically return an error, but behavior can vary by API.\n\n Using the same user resource, if you only want to update the name, you can send only the changed field: Request:\n\n[code-snippet-2]\nThe response would look like:\n\n[code-snippet-3]\n\n### Real-World Analogy\n• PUT: Repainting the entire wall, even if only one spot is dirty.\n• PATCH: Touching up just the dirty spot on the wall.\n",
+    "codeSnippets": [
+      "{\n  \"id\": 1,\n  \"name\": \"Alice\",\n  \"email\": \"alice@example.com\",\n  \"age\": 25\n}\n",
+      "PUT /users/1\nContent-Type: application/json\nBody:\n{\n  \"id\": 1,\n  \"name\": \"Alice Updated\",\n  \"email\": \"alice_updated@example.com\",\n  \"age\": 26\n}\n",
+      "PATCH /users/1\nContent-Type: application/json\nBody:\n{\n  \"name\": \"Alice Updated\"\n}\n",
+      "{\n  \"id\": 1,\n  \"name\": \"Alice Updated\",\n  \"email\": \"alice@example.com\",\n  \"age\": 25\n}\n"
+    ],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "POST, PUT, DELETE Methods",
+    "createdAt": "2025-01-16T19:34:46.635Z",
+    "id": 1737056086633000
+  },
+  {
+    "title": "What is the difference between HTTP 204 (No Content) and HTTP 304 (Not Modified)?",
+    "content": "**Both HTTP 204 and HTTP 304 indicate that no content is sent in the response body,** but they serve different purposes and are used in distinct contexts\n\n### HTTP 204: No Content\n**• Purpose**: Indicates that the request was successfully processed, but there is no content to return in the response body.\n**• Use Case:** Used when the client doesn’t need to reload or update any content.\n**• Imagine you have a to-do list app. You delete a task using the app, and after the task is deleted, the app doesn’t need to reload the entire list or show any extra information.**\nRequest:\n\n[code-snippet-0]\nResponse\n\n[code-snippet-1]\n\n### HTTP 304: Not Modified\n**• Purpose:** Indicates that the client’s cached version of the resource is still valid, so the server does not resend the resource.\n• Typically used with GET requests when the client wants to know if the cached resource is up to date.\n**• Now imagine you visit the to-do list app again, and your browser already has a cached version of your list. The browser asks the server if the list has changed since the last time it checked.**\n\n**You (Browser):** \"Has the to-do list changed since I last loaded it?\"\n**Server:** \"No, it hasn’t changed. Just use what you already have.\"\n\nRequest\n[code-snippet-2]\n\nResponse\n\n[code-snippet-3]\n",
+    "codeSnippets": [
+      "DELETE /api/items/123 HTTP/1.1\nHost: example.com\n",
+      "HTTP/1.1 204 No Content\n",
+      "GET /images/logo.png HTTP/1.1\nHost: example.com\nIf-Modified-Since: Wed, 15 Jan 2025 12:00:00 GMT\n",
+      "HTTP/1.1 304 Not Modified\n"
+    ],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "Making GET Requests",
+    "createdAt": "2025-01-17T12:43:29.291Z",
+    "id": 1737117809289000
+  },
+  {
+    "title": "How do you handle API requests in a Single Page Application (SPA) when the user navigates away before the request completes?",
+    "content": "Handling API requests in a Single Page Application (SPA) when a user navigates away before the request completes is important to ensure that:\n\n• Unnecessary API calls don’t continue after the user leaves the current page.\n• You don’t try to update the UI with data for a page that is no longer visible.\n\n**Problem**\n• When a user navigates away (e.g., clicks on a link or a button to go to a different page) while an API request is still in progress, the response may not be relevant anymore. You might end up updating the wrong page or causing unnecessary background work.\n\n**Solution **\n• You can handle this by canceling or ignoring the ongoing request when the user navigates away\n### using AbortController\n[code-snippet-0]\n\n**AbortController:**\n• The AbortController is used to control and cancel the fetch request if necessary. It has a signal property that can be passed to the fetch() function to link the request to this controller.\n• If the component unmounts (or if the user navigates away from the page), the controller.abort() method is called to cancel the API request. This prevents unnecessary network activity and ensures that the request doesn't continue after the page is no longer relevant.\n",
+    "codeSnippets": [
+      "import React, { useState, useEffect } from 'react';\n\nfunction UserProfile() {\n  const [userData, setUserData] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  // Create an AbortController to handle request cancellation\n  const controller = new AbortController();\n\n  useEffect(() => {\n    // Fetch user data with the AbortController signal\n    const fetchUserData = async () => {\n      try {\n        const response = await fetch('https://api.example.com/user', {\n          signal: controller.signal, // Pass the signal to the fetch\n        });\n\n        if (!response.ok) {\n          throw new Error('Failed to fetch user data');\n        }\n\n        const data = await response.json();\n        setUserData(data);\n      } catch (err) {\n        if (err.name !== 'AbortError') {\n          // Handle other errors\n          setError(err.message);\n        }\n      } finally {\n        setLoading(false);\n      }\n    };\n\n    fetchUserData();\n\n    // Cleanup function to cancel the request if the component unmounts\n    return () => {\n      controller.abort();  // Abort the fetch request if component unmounts\n    };\n  }, []); // Empty dependency array to run this effect only once when the component mounts\n\n  if (loading) return <div>Loading...</div>;\n  if (error) return <div>Error: {error}</div>;\n\n  return (\n    <div>\n      <h1>{userData.name}</h1>\n      <p>{userData.email}</p>\n    </div>\n  );\n}\n\nexport default UserProfile;\n"
+    ],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "Abort Controller",
+    "createdAt": "2025-01-17T12:58:00.130Z",
+    "id": 1737118680128000
+  },
+  {
+    "title": "What is the difference between optimistic and pessimistic updates when dealing with API data? When would you use each?",
+    "content": "**These strategies are especially useful when you need to update the UI before the server responds, improving the user experience by making the application feel faster.**\n\n**1. Optimistic Updates**\n• Optimistic updates involve assuming the API request will succeed and updating the UI immediately, without waiting for the server's response\n**• Use case:** Optimistic updates are useful in situations where user actions are expected to succeed most of the time, and you want the application to feel fast by reflecting the change as soon as possible.\n**• Example:** In a social media app, when a user likes a post, you might immediately show the like count increase, even before the server confirms the like.\n\n\n**2. Pessimistic Updates**\n• Pessimistic updates involve waiting for the server's response before updating the UI. In this approach, the UI change only happens if the server confirms the update, ensuring that the UI always reflects the server's actual state\n\n**• Use case**: Pessimistic updates are useful when the action is critical or the server request is unlikely to succeed most of the time, so you want to avoid showing the user a change that may later be invalidated.\n**• Example**: In an online banking app, transferring money involves high-risk actions, so it’s better to wait for the server confirmation before reflecting the change on the UI.",
+    "codeSnippets": [],
+    "videoUrls": [],
+    "category": "Fetch API",
+    "topic": "Best Practices",
+    "createdAt": "2025-01-17T13:09:26.867Z",
+    "id": 1737119366864000
+  }
+]

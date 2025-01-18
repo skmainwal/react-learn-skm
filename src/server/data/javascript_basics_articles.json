@@ -1,7 +1,7 @@
 [
   {
     "title": "Differences between let, const, and var in JavaScript:",
-    "content": "1.let:-\nUse:** For variables that can change later (but only within a block of code).**\nScope: **Block-scoped (only works inside the {} where it’s declared).**\nRedeclaration**: Cannot be redeclared in the same scope.**\n\n\n\n[code-snippet-1]\n\n2. const:-\nUse: For variables that should not change.\nScope: Block-scoped, like let.\nRedeclaration:** Cannot be redeclared or reassigned**.\nNote:** If you use const with objects or arrays, you can still modify their contents (but not reassign the whole object/array).**\n\n[code-snippet-2]\n\n\n3. var:-\nUse: The old way to declare variables (not recommended in modern code).\nScope:** Function-scoped (does not respect block-scoping).**\nRedeclaration: **Can be redeclared in the same scope (which can lead to bugs).**\n\n\n[code-snippet-3]\n",
+    "content": "1.let:\nUse:** For variables that can change later (but only within a block of code).**\nScope: **Block-scoped (only works inside the {} where it’s declared).**\nRedeclaration**: Cannot be redeclared in the same scope.**\n\n\n\n[code-snippet-1]\n\n2. const:-\nUse: For variables that should not change.\nScope: Block-scoped, like let.\nRedeclaration:** Cannot be redeclared or reassigned**.\nNote:** If you use const with objects or arrays, you can still modify their contents (but not reassign the whole object/array).**\n\n[code-snippet-2]\n\n\n3. var:-\nUse: The old way to declare variables (not recommended in modern code).\nScope:** Function-scoped (does not respect block-scoping).**\nRedeclaration: **Can be redeclared in the same scope (which can lead to bugs).**\n\n\n[code-snippet-3]\n",
     "codeSnippets": [
       "let age = 25;  \nage = 26; // Works!  \nconsole.log(age); // Output: 26\n\n// Redeclaration\n\n{\n let age = 25;  \nage = 26;\nlet age = 28;\n\nconsole.log(age); //Not work\n}",
       "let age = 25;  \nage = 26; // Works!  \nconsole.log(age); // Output: 26\n\n{\nlet age = 25;  \nage = 26; \nlet age= 28 // Not work\n \nconsole.log(age); \n\n}",
@@ -10,9 +10,10 @@
     ],
     "category": "JavaScript Basics",
     "topic": "Variables & Data Types",
-    "createdAt": "2025-01-01T08:55:03.924Z",
+    "createdAt": "2025-01-17T12:25:18.420Z",
     "id": 1735656205945,
-    "lastEdited": "2025-01-01T08:55:03.936Z"
+    "lastEdited": "2025-01-17T12:25:18.494Z",
+    "videoUrls": []
   },
   {
     "title": "How Scoping Differs Between let, const, and var",

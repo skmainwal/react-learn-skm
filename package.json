@@ -24,6 +24,7 @@
         "react-select": "^5.9.0",
         "react-syntax-highlighter": "^15.6.1",
         "react-toastify": "^11.0.2"
+        
     },
     "scripts": {
         "start": "node src/server/index.js",
