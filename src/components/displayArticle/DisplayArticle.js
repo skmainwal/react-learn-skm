@@ -114,6 +114,7 @@ const DisplayArticle = ({
           {filteredArticles.map((article) => (
             <div
               key={article.id}
+              id={article.id}
               className={`article-card ${
                 selectedArticle?.id === article.id ? "active" : ""
               }`}

@@ -1,1 +1,192 @@
-[]
+[
+  {
+    "title": "What is Django and MVT architecture",
+    "content": "**Django is a high-level Python web framework** that helps you build secure, maintainable websites quickly. It handles much of the hassle of web development, like URL routing, database interaction, and templating, so you can focus on building your app’s features.\n\n**MVT Architecture:**\nDjango follows the Model-View-Template (MVT) pattern:\n\n✅ **Model**: Handles the data and database layer (e.g., defining tables, fields, relationships).\n✅ **View**: Contains the logic that processes requests and returns responses (e.g., fetching data from models and passing it to templates).\n✅ **Template**: The HTML part responsible for rendering the data into a user-friendly format.\n\n**In short:**\n\nModel -> data & business logic\n\nView -> takes request, processes data, returns response\n\nTemplate -> presentation layer (HTML)",
+    "codeSnippets": [],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-07T15:42:41.611Z",
+    "id": 1751302489080000,
+    "lastEdited": "2025-07-07T15:42:41.625Z"
+  },
+  {
+    "title": "What is MVT architecture",
+    "content": "✅ **Model**\n• This handles the data: it defines the structure of your database tables (fields, relations).\n\n• You write Python classes that inherit from django.db.models.Model.\n\n• Django uses its **ORM (Object Relational Mapper)** to convert these classes into SQL and manage the database automatically.\n[code-snippet-0]\n\n\n✅ **View**\n• Views process requests and return responses.\n\n• They fetch data from the Model and pass it to the Template.\n\n• In Django, views are usually Python functions or classes that handle request/response logic.\n\n[code-snippet-1]\n\n✅ **Template**\n• Templates are responsible for presentation: rendering HTML pages dynamically using data passed from the View.\n\n• Django uses its own templating language to insert variables, loops, and conditionals into HTML safely.\n\n\n[code-snippet-2]\n\n\n**✅ How the Flow Works**\n1. User sends request → URL dispatcher maps it to View\n\n2. View interacts with Model to get data → passes data to Template\n\n3. Template generates final HTML → sends response back to user\n",
+    "codeSnippets": [
+      "class Book(models.Model):\n    title = models.CharField(max_length=100)\n    author = models.CharField(max_length=50)\n    published_date = models.DateField()\n",
+      "def book_list(request):\n    books = Book.objects.all()\n    return render(request, 'book_list.html', {'books': books})\n",
+      "{% for book in books %}\n  <h2>{{ book.title }}</h2>\n  <p>Author: {{ book.author }}</p>\n{% endfor %}\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "MVT Architecture",
+    "createdAt": "2025-07-08T05:04:56.548Z",
+    "id": 1751302802713000,
+    "lastEdited": "2025-07-08T05:04:56.581Z"
+  },
+  {
+    "category": "Django",
+    "title": "Types of ViewSet and when we use what?",
+    "content": "In Django REST Framework (DRF), **ViewSets **are used to simplify the creation of views for **RESTful APIs**. Instead of writing individual methods for** handling HTTP verbs like GET, POST, etc., you define a ViewSet and DRF handles routing automatically** (especially when using routers).\n\n\n[code-snippet-0]\n\n\n**1. ViewSet **\n^• Use When: You want full control over each action (list, create, retrieve, etc.)\n\n^• You Write: All logic yourself.\n\n^• Example Use Case: Custom business logic for each HTTP method.\n[code-snippet-1]\n\n\n**2. GenericViewSet **\n^• Use When: You want flexibility with built-in mixins (ListModelMixin, CreateModelMixin, etc.)\n\n^• You Compose: Only the functionality you need.\n\n^• Example Use Case: Only list and create support, no update/delete.\n[code-snippet-2]\n\n\n**3. ReadOnlyModelViewSet**\n^• Use When: API is read-only (e.g., public product catalog, FAQs)\n\n^• Provides: list() and retrieve() methods\n\n^• No Create/Update/Delete\n[code-snippet-3]\n\n\n**4. ModelViewSet**\n^• Use When: You need full CRUD operations\n\n^• Provides: All actions (list, retrieve, create, update, partial_update, destroy)\n\n^• Quick and Powerful\n\n[code-snippet-4]\n\n\n**Summary Decision Guide**\n[code-snippet-5]\n",
+    "codeSnippets": [
+      "| Type                   | Base Class                                     | Purpose                                                              |\n| ---------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |\n| `ViewSet`              | `rest_framework.viewsets.ViewSet`              | Manual control over all methods (`list`, `retrieve`, `create`, etc.) |\n| `GenericViewSet`       | `rest_framework.viewsets.GenericViewSet`       | Combine with mixins for flexibility                                  |\n| `ReadOnlyModelViewSet` | `rest_framework.viewsets.ReadOnlyModelViewSet` | Only allows `GET` (`list` and `retrieve`)                            |\n| `ModelViewSet`         | `rest_framework.viewsets.ModelViewSet`         | Full CRUD support out of the box                                     |\n",
+      "class CustomViewSet(ViewSet):\n    def list(self, request):\n        ^# Custom list logic\n        pass\n\n    def create(self, request):\n        ^# Custom create logic\n        pass\n",
+      "from rest_framework.mixins import ListModelMixin, CreateModelMixin\n\nclass ListCreateViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "class PostReadOnlyViewSet(ReadOnlyModelViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "class PostViewSet(ModelViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "| Scenario                 | Recommended ViewSet          |\n| ------------------------ | ---------------------------- |\n| Custom logic needed      | `ViewSet`                    |\n| Only some methods needed | `GenericViewSet` with mixins |\n| Read-only API            | `ReadOnlyModelViewSet`       |\n| Full CRUD API            | `ModelViewSet`               |\n"
+    ],
+    "videoUrls": [],
+    "topic": "Views & Templates",
+    "createdAt": "2025-07-08T05:09:19.356Z",
+    "lastEdited": "2025-07-08T05:04:23.992Z",
+    "id": 1751951359349000
+  },
+  {
+    "title": "What is Django?",
+    "content": "**Django is a high-level Python web framework** . It follows the **Model-View-Template (MVT) architectural pattern** and comes with many built-in features.\n\n **Django Components (MVT Pattern):**\n[code-snippet-0]\n\n**📦 Example of What Comes Built-in:**\n• Admin panel\n\n• User authentication and permissions\n\n• URL routing\n\n• Form handling\n\n• ORM for database interaction\n\n• Session and cookies management\n\n• Caching and middleware support",
+    "codeSnippets": [
+      "| Component    | Role                                              |\n| ------------ | ------------------------------------------------- |\n| **Model**    | Defines the data structure (database schema)      |\n| **View**     | Contains business logic and interacts with models |\n| **Template** | Responsible for the UI (HTML rendering)           |\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-08T05:16:35.319Z",
+    "id": 1751951795317000
+  },
+  {
+    "title": "What is a Django project vs app?",
+    "content": "In Django, the **terms Project and App have specific meanings**, and understanding the difference is crucial when organizing your code.\n\n**🏗️ Django Project  (django-admin startproject projectname) **\nA project is the entire web application or website you're building.\nIt contains configuration settings and can contain multiple apps.\n\n🔹 Characteristics:\n  **• Created using  django-admin startproject projectname**\n\n• Manages the overall settings, URLs, and dependencies\n\n• Contains files like:\n\n[code-snippet-0]\n\n\n**📦 Django App   (python manage.py startapp appname)**\nAn app is a modular component of your project that does one thing — like handling blog posts, users, comments, payments, etc.\n\n🔹 Characteristics:\n• Created using python manage.py startapp appname\n\n• Can be reused across multiple projects\n\n• Contains its own:\n\n[code-snippet-1]\n",
+    "codeSnippets": [
+      "myproject/\n├── manage.py\n├── myproject/\n│   ├── __init__.py\n│   ├── settings.py\n│   ├── urls.py\n│   └── wsgi.py\n",
+      "myapp/\n├── admin.py        # Admin interface config\n├── apps.py         # App configuration\n├── models.py       # Database models\n├── views.py        # View logic\n├── urls.py         # App-specific URLs (optional)\n├── templates/      # HTML templates\n└── tests.py        # Unit tests\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-08T05:21:57.878Z",
+    "id": 1751952117870000
+  },
+  {
+    "title": "How does Django handle HTTP requests?",
+    "content": "**🔁 Django Request-Response Lifecycle**\n**1. HTTP Request from Browser**\n• A user visits a URL in their browser (e.g., https://example.com/blog/5), which sends an HTTP request to the server hosting the Django app.\n\n**2. Web Server Gateway (WSGI/ASGI)**\n• Django uses WSGI (Web Server Gateway Interface) or ASGI (Asynchronous Server Gateway Interface) to communicate with web servers like Gunicorn, uWSGI, or Daphne.\n\n• The WSGI/ASGI server passes the request to the Django application.\n\n• 🔧 File involved: wsgi.py or asgi.py\n\n\n**3. Django Creates a HttpRequest Object**\n• Django converts the raw request into a HttpRequest object, which contains metadata such as:\n\n• GET, POST data\n\n• Headers\n\n• Cookies\n\n• Path and method (GET, POST, etc.)\n\n• User info (if authenticated)\n[code-snippet-0]\n\n**4. Middleware Processing**\n• Django passes the request through a middleware stack defined in settings.py under MIDDLEWARE.\n\n**Middleware functions can:**\n• Process requests before the view runs\n\n• Modify responses after the view runs\n\n• Handle exceptions, authentication, security, etc.\n\n[code-snippet-1]\n\n**Example: Checking if the user is authenticated, adding CORS headers, etc.**\n\n**5. URL Routing (urls.py)**\nDjango matches the request URL against patterns defined in your urls.py files.\n\n[code-snippet-2]\nIf it matches blog/5/, Django routes it to the corresponding view: views.blog_detail(request, id=5)\n\n**6. View Function Executes**\nThe view handles the logic based on the request.\n\nIt may interact with:\n\n• Models (to query the database)\n\n• Forms (to validate user input)\n\n• Templates (to render HTML)\n\n\n[code-snippet-3]\n\n**7. Template Rendering (if applicable)**\n• If the view uses render(), it loads the HTML template, fills in dynamic data (context), and returns a fully-rendered HTML response.\n\n[code-snippet-4]\n\n**8. Response Object (HttpResponse)**\nThe view returns an HttpResponse or JsonResponse, which Django then processes through response middleware.\n\n[code-snippet-5]\n\n**9. Back through Middleware (Response Phase)**\nThe HttpResponse goes back through the middleware (reverse order), allowing middleware to:\n\n• Modify the response\n\n• Add headers\n\n• Handle caching, compression, etc.\n\n**10. HTTP Response Sent to Browser**\nFinally, Django sends the response (HTML, JSON, file, redirect, etc.) back to the user's browser.\n\n[code-snippet-6]\n",
+    "codeSnippets": [
+      "from django.http import HttpRequest\n",
+      "MIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    ...\n]\n",
+      "urlpatterns = [\n    path('blog/<int:id>/', views.blog_detail),\n]\n",
+      "def blog_detail(request, id):\n    post = Blog.objects.get(pk=id)\n    return render(request, 'blog/detail.html', {'post': post})\n",
+      "render(request, 'template.html', {'data': value})\n",
+      "from django.http import HttpResponse\n\nreturn HttpResponse(\"Here is your blog post!\")\n",
+      "Browser\n  ↓\nWSGI/ASGI Server\n  ↓\nDjango Request Object\n  ↓\nMiddleware (request phase)\n  ↓\nURL Dispatcher (urls.py)\n  ↓\nView Function (logic + DB)\n  ↓\nTemplate Rendering (if needed)\n  ↓\nResponse Object\n  ↓\nMiddleware (response phase)\n  ↓\nWSGI/ASGI Server\n  ↓\nBrowser (Response shown)\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-08T05:36:00.772Z",
+    "id": 1751952960769000
+  },
+  {
+    "title": "📦 What is a Model in Django?",
+    "content": "**A Model in Django is a Python class** that defines the structure of your **database tables. **It acts as a bridge between your Python code and the database using **Django’s Object-Relational Mapper (ORM).**\n\n✅ **Why Use Django Models? **\n• Automatically creates SQL tables for you.\n\n• Lets you interact with the database using Python (no raw SQL).\n\n• Ensures consistency between your app and your DB schema.\n[code-snippet-0]\n",
+    "codeSnippets": [
+      "# myapp/models.py\n\nfrom django.db import models\n\nclass BlogPost(models.Model):\n    title = models.CharField(max_length=100)\n    content = models.TextField()\n    author = models.CharField(max_length=50)\n    created_at = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self):\n        return self.title\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Models & ORM",
+    "createdAt": "2025-07-08T05:41:50.862Z",
+    "id": 1751953310861000
+  },
+  {
+    "title": "What is ORM in Django? ",
+    "content": "**ORM stands for Object-Relational Mapper**. In Django, the **ORM allows developers to interact with the relational database (like PostgreSQL, MySQL, SQLite) using Python code instead of SQL.**\n\n\nIt acts as **a bridge between Python objects and database tables, **so you can create, read, update, and delete (CRUD) data using simple Python syntax.\n\n**🔧 Example (Plain SQL vs Django ORM)**\n**SQL**\n\n[code-snippet-0]\n\n**Django ORM**\n\n[code-snippet-1]\n\n**🧱 How It Works:**\n• Each model class you define maps to a table in the database.\n\n• Each attribute in the model is a column in the table.\n\n• Django provides a QuerySet API to interact with the database using model methods.",
+    "codeSnippets": [
+      "SELECT * FROM blog_post WHERE author = 'Shubham';\n",
+      "BlogPost.objects.filter(author='Shubham')\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Models & ORM",
+    "createdAt": "2025-07-08T05:46:14.507Z",
+    "id": 1751953574503000
+  },
+  {
+    "title": "What are Django generic views?",
+    "content": "**Django generic views are pre-built class-based views (CBVs) **that help you handle common patterns like displaying a list,** showing a single object, creating, updating, or deleting objects — without writing repetitive boilerplate code.**\n\n**🧱 Common Types of Generic Views:**\n[code-snippet-0]\n\n🧰 Example: Blog App Using Generic Views\n\n **models.py**\n[code-snippet-1]\n**🔹 views.py (Using ListView and DetailView)**\n\n[code-snippet-2]\n\n**🔹 urls.py**\n\n[code-snippet-3]\n\n**🧠 Key Points to Remember:**\n• Generic views are class-based views.\n\n•** Use .as_view() to convert the class into a callable view.**\n\n• You can override methods like get_queryset(), form_valid(), etc., for customization.\n\n",
+    "codeSnippets": [
+      "| View Name    | Purpose                            |\n| ------------ | ---------------------------------- |\n| `ListView`   | Show a list of objects             |\n| `DetailView` | Show details of a single object    |\n| `CreateView` | Display and process form to create |\n| `UpdateView` | Display and process form to update |\n| `DeleteView` | Confirm and delete an object       |\n",
+      "from django.db import models\n\nclass BlogPost(models.Model):\n    title = models.CharField(max_length=100)\n    content = models.TextField()\n",
+      "from django.views.generic import ListView, DetailView\nfrom .models import BlogPost\n\nclass BlogListView(ListView):\n    model = BlogPost\n    template_name = 'blog_list.html'\n    context_object_name = 'posts'\n\nclass BlogDetailView(DetailView):\n    model = BlogPost\n    template_name = 'blog_detail.html'\n    context_object_name = 'post'\n",
+      "from django.urls import path\nfrom .views import BlogListView, BlogDetailView\n\nurlpatterns = [\n    path('', BlogListView.as_view(), name='blog-list'),\n    path('<int:pk>/', BlogDetailView.as_view(), name='blog-detail'),\n]\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Views & Templates",
+    "createdAt": "2025-07-08T05:59:24.281Z",
+    "id": 1751954099747000,
+    "lastEdited": "2025-07-08T05:59:24.304Z"
+  },
+  {
+    "title": "What is the difference between filter(), get(), and all()?",
+    "content": "**🔍 1. all()**\n✅ What it does:\n• Returns all objects in the queryset (like SELECT * in SQL).\n✅ Use Case:\n• When you want to list all rows from a table (e.g., show all blog posts).\n\n\n[code-snippet-0]\n\n**🔎 2. filter()**\n**✅ What it does:**\n• Returns a QuerySet of objects that match the given conditions.\n If no match, returns an empty QuerySet — doesn’t raise an error.\n\n**✅ Use Case:**\n• When you need to search or filter records based on one or more conditions.\n\n• Safe to use when you're unsure if matching data exists.\n[code-snippet-1]\n\n**🔐 3. get()**\n**✅ What it does:**\n• Returns a single object that matches the condition.\nIf:\n\n• No match → raises DoesNotExist exception\n\n• More than one match → raises MultipleObjectsReturned exception\n\n**✅ Use Case:**\n• When you are sure that only one unique object should match (e.g., fetching by primary key or unique field).\n\n\n\n[code-snippet-2]\n\n**Summary**\n\n[code-snippet-3]\n",
+    "codeSnippets": [
+      "from myapp.models import BlogPost\n\nposts = BlogPost.objects.all()\n",
+      "posts_by_author = BlogPost.objects.filter(author=\"Shubham\")\n",
+      "post = BlogPost.objects.get(id=1)\n",
+      "| Method     | Returns       | Error on No Match?   | Multiple Matches?               | Use When…                              |\n| ---------- | ------------- | -------------------- | ------------------------------- | -------------------------------------- |\n| `all()`    | All records   | No                   | N/A                             | You want **everything** from a table   |\n| `filter()` | QuerySet      | No (returns empty)   | No                              | You want **some or none** (safe query) |\n| `get()`    | Single object | Yes (`DoesNotExist`) | Yes (`MultipleObjectsReturned`) | You want **exactly one object**        |\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Models & ORM",
+    "createdAt": "2025-07-08T06:05:52.289Z",
+    "id": 1751954752287000
+  },
+  {
+    "title": "⚙️ How Does Django Handle Middleware?",
+    "content": "******Middleware in Django is a framework of hooks into Django’s request/response processing**. It is a layer between the request and view, and between the view and the response.\n\n**Middleware lets you process, modify, or block requests and responses globally — before they reach the view or after they leave it.**\n\n**🔁 Django Request/Response Lifecycle with Middleware**\n**🔄 Request Phase: **\n• User sends an HTTP request.\n\n• Django processes this request through middleware (top-down).\n\n• If all middleware passes, Django routes the request to the correct view.\n\n**🔄 Response Phase:**\n• View returns a response.\n\n• The response passes back through middleware (bottom-up).\n\n• Final response is sent to the browser.\n\n🧱** Structure of Middleware**\nEach middleware is a Python class with at least one of these methods:\n[code-snippet-0]\n\n**📁 Where Is Middleware Configured?**\n\nIn settings.py under the MIDDLEWARE list:\n\n[code-snippet-1]\n**Order matters: the request passes through middleware in listed order, and responses return in reverse order**.\n**🧰 Use Cases for Middleware:**\n\n[code-snippet-2]\n",
+    "codeSnippets": [
+      "class MyMiddleware:\n    def __init__(self, get_response):\n        self.get_response = get_response\n\n    def __call__(self, request):\n        # Code before view\n        response = self.get_response(request)\n        # Code after view\n        return response\n",
+      "MIDDLEWARE = [\n    'django.middleware.security.SecurityMiddleware',\n    'django.contrib.sessions.middleware.SessionMiddleware',\n    'django.middleware.common.CommonMiddleware',\n    ...\n    'myapp.middleware.MyCustomMiddleware',  # Your custom one\n]\n",
+      "| Purpose                    | Middleware Example           |\n| -------------------------- | ---------------------------- |\n| Session management         | `SessionMiddleware`          |\n| Authentication check       | `AuthenticationMiddleware`   |\n| Security headers           | `SecurityMiddleware`         |\n| Cross-site request forgery | `CsrfViewMiddleware`         |\n| Custom logging             | Your custom middleware class |\n| IP banning, rate limiting  | Custom logic in middleware   |\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-08T08:36:28.550Z",
+    "id": 1751963472710000,
+    "lastEdited": "2025-07-08T08:36:28.568Z"
+  },
+  {
+    "title": "Create a Custom Middleware",
+    "content": "Let's create a custom Django middleware that** logs the time taken to process each request — and another that enables maintenance mode.**\n\n**✅ 1. Request Time Logging Middleware**\n• Logs how long each request takes to process, which is useful for performance monitoring.\n\n📁 File: yourapp/middleware.py\n\n[code-snippet-0]\n➕ Add to settings.py:\n\n[code-snippet-1]\n\n\n**✅ 2. Maintenance Mode Middleware**\n• Shows a “Site Under Maintenance” message unless the user is a superuser.\n\n\n📁 File: yourapp/middleware.py\n[code-snippet-2]\n\n➕ Add to settings.py:\n[code-snippet-3]\n\n**🧪 Test It:**\n• For request timing, check your terminal output after loading a few pages.\n\n• For maintenance mode, try opening the site in an incognito window (logged out) — you’ll get the maintenance message.\n",
+    "codeSnippets": [
+      "import time\n\nclass RequestTimeLoggingMiddleware:\n    def __init__(self, get_response):\n        self.get_response = get_response\n\n    def __call__(self, request):\n        start_time = time.time()\n\n        response = self.get_response(request)\n\n        duration = time.time() - start_time\n        print(f\"[{request.method}] {request.path} took {duration:.2f} seconds.\")\n\n        return response\n",
+      "MIDDLEWARE = [\n    ...\n    'yourapp.middleware.RequestTimeLoggingMiddleware',\n]\n",
+      "from django.http import HttpResponse\nfrom django.conf import settings\n\nclass MaintenanceModeMiddleware:\n    def __init__(self, get_response):\n        self.get_response = get_response\n\n    def __call__(self, request):\n        # Enable maintenance mode with a setting\n        if getattr(settings, 'MAINTENANCE_MODE', False):\n            if not request.user.is_authenticated or not request.user.is_superuser:\n                return HttpResponse(\"<h1>Site Under Maintenance</h1>\", status=503)\n        return self.get_response(request)\n",
+      "MIDDLEWARE = [\n    ...\n    'yourapp.middleware.MaintenanceModeMiddleware',\n]\n\n# Enable this flag to activate maintenance mode\nMAINTENANCE_MODE = True\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-08T08:34:54.436Z",
+    "id": 1751963694431000
+  },
+  {
+    "title": "🧠 What Is a Context Processor in Django?",
+    "content": "**A context processor is a Python function in Django** that **adds common variables to the context of every template automatically, without manually passing them from each view.**\n\n**NOTE:- It's useful for passing global data (like current user, site settings, or navigation menus) to all templates.**\n\n**🧱 Default Example (Behind the Scenes)**\nDjango includes built-in context processors like\n\n[code-snippet-0]\nThat’s why you can do this in templates:\n\n[code-snippet-1]\nEven though user wasn’t passed explicitly by your view.\n\n\n**🧰 Custom Context Processor: Step-by-Step**\n\n**1️⃣ Create a context processor function**\n📁 yourapp/context_processors.py:\n\n[code-snippet-2]\n\n**2️⃣ Register it in settings.py**\n\n[code-snippet-3]\n\n**3️⃣ Use in any template**\n[code-snippet-4]\n\n**You didn’t have to pass this from any view — it’s automatically available in every template!**\n\n\n\n**🎯 Use Cases for Context Processors**\n[code-snippet-5]\n",
+    "codeSnippets": [
+      "'django.template.context_processors.request'  # adds `request` object to templates\n'django.contrib.auth.context_processors.auth'  # adds `user` to templates\n",
+      "{% if user.is_authenticated %}\n    Hello, {{ user.username }}!\n{% endif %}\n",
+      "def site_info(request):\n    return {\n        'site_name': 'My Awesome Site',\n        'support_email': 'support@example.com',\n    }\n",
+      "TEMPLATES = [\n    {\n        'OPTIONS': {\n            'context_processors': [\n                ...\n                'yourapp.context_processors.site_info',\n            ],\n        },\n    },\n]\n",
+      "<footer>\n  &copy; {{ site_name }} - Contact us at {{ support_email }}\n</footer>\n",
+      "| Purpose              | Example                               |\n| -------------------- | ------------------------------------- |\n| Global site settings | Site name, email, brand logo          |\n| User-related info    | Current subscription or cart count    |\n| Navigation           | Show categories or menus in navbar    |\n| Analytics            | Pass Google Analytics ID to all pages |\n"
+    ],
+    "videoUrls": [],
+    "category": "Django",
+    "topic": "Django Basics",
+    "createdAt": "2025-07-08T08:51:33.404Z",
+    "id": 1751964693403000
+  }
+]

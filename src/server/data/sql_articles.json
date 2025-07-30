@@ -1,0 +1,88 @@
+[
+  {
+    "title": "What SQLAlchemy Does",
+    "content": "******1. Database Abstraction**\n**SQLAlchemy allows you to write Python code to interact **with various SQL databases (like PostgreSQL, MySQL, SQLite, etc.) without writing raw SQL queries.\n\n\n**2. ORM (Object Relational Mapper)**\nYou can **define your database tables as Python classes**. These classes can then be used to insert, update, delete, or query data—just like working with normal Python objects.\n\n\n\n\n** Why Use SQLAlchemy? **\n✅ Cross-database compatibility\n\n✅ Avoids repetitive boilerplate SQL\n\n✅ ORM makes it easier to work with complex relationships\n\n✅ Secure and prevents SQL injection\n\n✅ Large community and documentation",
+    "codeSnippets": [],
+    "videoUrls": [],
+    "category": "SQL",
+    "topic": "SQLAlchemy",
+    "createdAt": "2025-07-07T15:47:44.260Z",
+    "id": 1751902805627000,
+    "lastEdited": "2025-07-07T15:47:44.279Z"
+  },
+  {
+    "title": " Be Careful using Session ",
+    "content": "• If you don’t commit, the changes won’t be saved to the database.\n\n• If you reuse sessions too broadly, like globally across threads or requests (in a web app), it can cause bugs.\n\n**Best Practice**\n• Use session per unit of work.\n\n• Always close or remove the session after you're done using it:\n\n\n\n[code-snippet-0\n\nOR\n\n[code-snippet-1]\nThis automatically handles closing the session.\n",
+    "codeSnippets": [
+      "session.commit()\nsession.close()\n",
+      "with Session() as session:\n    # operations\n    session.commit()\n"
+    ],
+    "videoUrls": [],
+    "category": "SQL",
+    "topic": "SQLAlchemy",
+    "createdAt": "2025-07-07T15:53:33.736Z",
+    "id": 1751903613733000
+  },
+  {
+    "title": "what will happen if we do not close the session",
+    "content": "• If you don’t close a SQLAlchemy session, here’s what can happen\n\n**⚠️ 1. Memory Leaks**\nThe session holds references to all objects you’ve loaded or modified. If you don’t close it, these references stay in memory and can pile up—leading to memory leaks and increased RAM usage.\n\n**⚠️ 2. Database Connection Not Released**\nEach session keeps a connection to the database. If you don’t close the session:\n\nThe connection may remain open, reducing the number of connections available in the pool.\n\nOver time, this may exhaust your database connections, especially in high-load environments like web apps or APIs.\n\n**⚠️ 3. Uncommitted Changes**\nIf you don’t commit and close, any pending changes will be lost if the app crashes or restarts, and the transaction might stay open, causing database locks.\n\n**⚠️ 4. Thread Safety Issues**\nIn multi-threaded apps (like Flask, FastAPI), reusing or not closing sessions can result in:\n\nCross-thread access issues\n\nData inconsistency\n\nWeird bugs that are hard to trace\n\n\n**✅ Best Practice**\nUse with context manager or try-finally pattern:\n\n\n\n\n[code-snippet-0]\nOR\n\n[code-snippet-1]\n\n **Built-in Exception Handling**\n\n• If an error occurs in the block:\n\n• The session is rolled back automatically if you use Session.begin()\n\n• It still closes the session (whether error or success)\n\nExample with transaction management:\n\n[code-snippet-2]\n",
+    "codeSnippets": [
+      "# Safe usage with context manager (SQLAlchemy 1.4+)\nwith Session() as session:\n    # Do DB operations\n    session.commit()\n# Session auto-closes here\n",
+      "# Manual safe pattern\nsession = Session()\ntry:\n    # DB operations\n    session.commit()\nfinally:\n    session.close()\n",
+      "with Session.begin() as session:\n    session.add(user1)\n    session.add(user2)\n# If any add fails, the whole transaction rolls back automatically\n"
+    ],
+    "videoUrls": [],
+    "category": "SQL",
+    "topic": "SQLAlchemy",
+    "createdAt": "2025-07-07T15:57:33.159Z",
+    "id": 1751903853157000
+  },
+  {
+    "title": "How to cretae a Modal in SQLAlchemy",
+    "content": "\n[code-snippet-0]\n",
+    "codeSnippets": [
+      "from sqlalchemy import Column, Integer, String\nfrom sqlalchemy.orm import declarative_base\nBase = declarative_base()\n\n\nclass User(Base):\n    __tablename__ = 'users'  # table name in the DB\n\n    id = Column(Integer, primary_key=True)\n    name = Column(String(50), nullable=False)\n    email = Column(String(100), unique=True)\n\n    def __repr__(self):\n        return f\"<User(id={self.id}, name='{self.name}', email='{self.email}')>\"\n"
+    ],
+    "videoUrls": [],
+    "category": "SQL",
+    "topic": "SQLAlchemy",
+    "createdAt": "2025-07-07T16:00:28.043Z",
+    "id": 1751904028039000
+  },
+  {
+    "title": "Types of ViewSet and when we use what?",
+    "content": "In Django REST Framework (DRF), **ViewSets **are used to simplify the creation of views for **RESTful APIs**. Instead of writing individual methods for** handling HTTP verbs like GET, POST, etc., you define a ViewSet and DRF handles routing automatically** (especially when using routers).\n\n\n[code-snippet-0]\n\n\n**1. ViewSet **\n^• Use When: You want full control over each action (list, create, retrieve, etc.)\n\n^• You Write: All logic yourself.\n\n^• Example Use Case: Custom business logic for each HTTP method.\n[code-snippet-1]\n\n\n**2. GenericViewSet **\n^• Use When: You want flexibility with built-in mixins (ListModelMixin, CreateModelMixin, etc.)\n\n^• You Compose: Only the functionality you need.\n\n^• Example Use Case: Only list and create support, no update/delete.\n[code-snippet-2]\n\n\n**3. ReadOnlyModelViewSet**\n^• Use When: API is read-only (e.g., public product catalog, FAQs)\n\n^• Provides: list() and retrieve() methods\n\n^• No Create/Update/Delete\n[code-snippet-3]\n\n\n**4. ModelViewSet**\n^• Use When: You need full CRUD operations\n\n^• Provides: All actions (list, retrieve, create, update, partial_update, destroy)\n\n^• Quick and Powerful\n\n[code-snippet-4]\n\n\n**Summary Decision Guide**\n[code-snippet-5]\n",
+    "codeSnippets": [
+      "| Type                   | Base Class                                     | Purpose                                                              |\n| ---------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |\n| `ViewSet`              | `rest_framework.viewsets.ViewSet`              | Manual control over all methods (`list`, `retrieve`, `create`, etc.) |\n| `GenericViewSet`       | `rest_framework.viewsets.GenericViewSet`       | Combine with mixins for flexibility                                  |\n| `ReadOnlyModelViewSet` | `rest_framework.viewsets.ReadOnlyModelViewSet` | Only allows `GET` (`list` and `retrieve`)                            |\n| `ModelViewSet`         | `rest_framework.viewsets.ModelViewSet`         | Full CRUD support out of the box                                     |\n",
+      "class CustomViewSet(ViewSet):\n    def list(self, request):\n        ^# Custom list logic\n        pass\n\n    def create(self, request):\n        ^# Custom create logic\n        pass\n",
+      "from rest_framework.mixins import ListModelMixin, CreateModelMixin\n\nclass ListCreateViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "class PostReadOnlyViewSet(ReadOnlyModelViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "class PostViewSet(ModelViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "| Scenario                 | Recommended ViewSet          |\n| ------------------------ | ---------------------------- |\n| Custom logic needed      | `ViewSet`                    |\n| Only some methods needed | `GenericViewSet` with mixins |\n| Read-only API            | `ReadOnlyModelViewSet`       |\n| Full CRUD API            | `ModelViewSet`               |\n"
+    ],
+    "videoUrls": [],
+    "category": "SQL",
+    "topic": "Views & Templates",
+    "createdAt": "2025-07-08T05:04:23.992Z",
+    "id": 1751905899132000,
+    "lastEdited": "2025-07-08T05:04:37.204Z"
+  },
+  {
+    "title": "Types of ViewSet and when we use what?",
+    "content": "In Django REST Framework (DRF), **ViewSets **are used to simplify the creation of views for **RESTful APIs**. Instead of writing individual methods for** handling HTTP verbs like GET, POST, etc., you define a ViewSet and DRF handles routing automatically** (especially when using routers).\n\n\n[code-snippet-0]\n\n\n**1. ViewSet **\n^• Use When: You want full control over each action (list, create, retrieve, etc.)\n\n^• You Write: All logic yourself.\n\n^• Example Use Case: Custom business logic for each HTTP method.\n[code-snippet-1]\n\n\n**2. GenericViewSet **\n^• Use When: You want flexibility with built-in mixins (ListModelMixin, CreateModelMixin, etc.)\n\n^• You Compose: Only the functionality you need.\n\n^• Example Use Case: Only list and create support, no update/delete.\n[code-snippet-2]\n\n\n**3. ReadOnlyModelViewSet**\n^• Use When: API is read-only (e.g., public product catalog, FAQs)\n\n^• Provides: list() and retrieve() methods\n\n^• No Create/Update/Delete\n[code-snippet-3]\n\n\n**4. ModelViewSet**\n^• Use When: You need full CRUD operations\n\n^• Provides: All actions (list, retrieve, create, update, partial_update, destroy)\n\n^• Quick and Powerful\n\n[code-snippet-4]\n\n\n**Summary Decision Guide**\n[code-snippet-5]\n",
+    "codeSnippets": [
+      "| Type                   | Base Class                                     | Purpose                                                              |\n| ---------------------- | ---------------------------------------------- | -------------------------------------------------------------------- |\n| `ViewSet`              | `rest_framework.viewsets.ViewSet`              | Manual control over all methods (`list`, `retrieve`, `create`, etc.) |\n| `GenericViewSet`       | `rest_framework.viewsets.GenericViewSet`       | Combine with mixins for flexibility                                  |\n| `ReadOnlyModelViewSet` | `rest_framework.viewsets.ReadOnlyModelViewSet` | Only allows `GET` (`list` and `retrieve`)                            |\n| `ModelViewSet`         | `rest_framework.viewsets.ModelViewSet`         | Full CRUD support out of the box                                     |\n",
+      "class CustomViewSet(ViewSet):\n    def list(self, request):\n        ^# Custom list logic\n        pass\n\n    def create(self, request):\n        ^# Custom create logic\n        pass\n",
+      "from rest_framework.mixins import ListModelMixin, CreateModelMixin\n\nclass ListCreateViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "class PostReadOnlyViewSet(ReadOnlyModelViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "class PostViewSet(ModelViewSet):\n    queryset = Post.objects.all()\n    serializer_class = PostSerializer\n",
+      "| Scenario                 | Recommended ViewSet          |\n| ------------------------ | ---------------------------- |\n| Custom logic needed      | `ViewSet`                    |\n| Only some methods needed | `GenericViewSet` with mixins |\n| Read-only API            | `ReadOnlyModelViewSet`       |\n| Full CRUD API            | `ModelViewSet`               |\n"
+    ],
+    "videoUrls": [],
+    "category": "SQL",
+    "topic": "Views & Templates",
+    "createdAt": "2025-07-08T05:07:12.992Z",
+    "lastEdited": "2025-07-08T05:04:23.992Z",
+    "id": 1751951232990000
+  }
+]
